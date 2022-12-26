@@ -53,7 +53,7 @@ class ArchInstaller:
     def enable_multilib(self, pacman_conf_file = "/etc/pacman.conf"):
         run_command(f"sed -i \"/\[multilib\]/,/Include/\"\'s/^#//\' {pacman_conf_file}")
     
-    def install_linux_base(self):
+    def install_all_packages(self):
         required_packages = [
             "base",
             "linux",
@@ -62,8 +62,9 @@ class ArchInstaller:
             "python",
             "python-rich",
             "python-pip",
+            "archlinux-keyring"
             # "python-inquirer",
-        ]
+        ] + self.get_needed_packages()
         if self.response["filesystem"] == "BTRFS":
             required_packages += ["btrfs-progs"]
         req_package_str = " ".join(required_packages)
@@ -239,8 +240,8 @@ class ArchInstaller:
         time.sleep(5)
         os.chroot(self.fs.temp_mount_dir)
         time.sleep(5)
-        run_command("systemctl enable --now dhcpcd")
-        time.sleep(5)
+        # run_command("systemctl enable --now dhcpcd")
+        # time.sleep(5)
         print(os.getcwd())
         time.sleep(5)
         self.enable_parallel_downloads()
@@ -254,7 +255,7 @@ class ArchInstaller:
         if "Sublime Text" in self.response["packages_to_install"]:
             self.add_sublime_text_repo()
         time.sleep(5)
-        run_command("pacman -Syy archlinux-keyring --noconfirm")
+        # run_command("pacman -Syy archlinux-keyring --noconfirm")
         quit()
         if self.response["swap_type"] == "Swap to File":
             self.generate_swap_file()
@@ -262,9 +263,9 @@ class ArchInstaller:
         self.setup_locale()
         self.setup_hostname()
         self.setup_username_and_password()
-        packages_to_install = self.get_needed_packages()
-        packages_to_install_text = " ".join(packages_to_install)
-        run_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
+        # packages_to_install = self.get_needed_packages()
+        # packages_to_install_text = " ".join(packages_to_install)
+        # run_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
         if self.response["remove_sudo_password"]:
             run_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
         if self.response["filesystem"] == "BTRFS":
