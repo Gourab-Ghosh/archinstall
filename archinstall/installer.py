@@ -227,7 +227,9 @@ class ArchInstaller:
         self.enable_parallel_downloads()
         self.install_linux_base()
         run_command(f"genfstab -U {self.fs.temp_mount_dir} >> {self.fs.temp_mount_dir}/etc/fstab")
+        print(os.getcwd())
         os.chroot(self.fs.temp_mount_dir)
+        print(os.getcwd())
         self.enable_parallel_downloads()
         if self.response["enable_multilib_repo"]:
             self.enable_multilib()
