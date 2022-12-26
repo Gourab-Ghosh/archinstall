@@ -57,7 +57,7 @@ class ArchInstaller:
             "linux-firmware",
             "python",
             "python-rich",
-            "python-inquirer",
+            # "python-inquirer",
         ]
         if self.response["filesystem"] == "BTRFS":
             required_packages += ["btrfs-progs"]
