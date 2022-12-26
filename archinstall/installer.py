@@ -1,4 +1,4 @@
-import os, shutil
+import os, shutil, time
 from rich import print
 from utils import run_command
 from filesystem_setup import EXT4Filesystem, BTRFSFilesystem
@@ -234,11 +234,17 @@ class ArchInstaller:
         run_command(f"genfstab -U {self.fs.temp_mount_dir} >> {self.fs.temp_mount_dir}/etc/fstab")
         run_command(f"cp -r {os.path.split(os.path.split(__file__)[0])[0]} {self.fs.temp_mount_dir}/root/")
         print(os.getcwd())
+        time.sleep(5)
         os.chdir(os.path.join(self.fs.temp_mount_dir, "root"))
+        time.sleep(5)
         os.chroot(self.fs.temp_mount_dir)
+        time.sleep(5)
         run_command("systemctl enable --now NetworkManager")
+        time.sleep(5)
         print(os.getcwd())
+        time.sleep(5)
         self.enable_parallel_downloads()
+        time.sleep(5)
         if self.response["enable_multilib_repo"]:
             self.enable_multilib()
         if self.response["add_chaotic_aur_repo"]:
@@ -247,6 +253,7 @@ class ArchInstaller:
             self.add_blackarch_repo()
         if "Sublime Text" in self.response["packages_to_install"]:
             self.add_sublime_text_repo()
+        time.sleep(5)
         run_command("pacman -Syy archlinux-keyring --noconfirm")
         quit()
         if self.response["swap_type"] == "Swap to File":
