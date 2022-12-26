@@ -254,7 +254,7 @@ class ArchInstaller:
         self.setup_username_and_password()
         packages_to_install = self.get_needed_packages()
         packages_to_install_text = " ".join(packages_to_install)
-        run_command(f"pacman -Syy {packages_to_install_text} --needed --noconfirm")
+        run_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
         if self.response["remove_sudo_password"]:
             run_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
         if self.response["filesystem"] == "BTRFS":
@@ -305,10 +305,10 @@ if __name__ == "__main__":
         "display_manager": "SDDM",
         "locales": ["en_US.UTF-8 UTF-8"],
         # "locales": ["zu_ZA ISO-8859-1"],
-        "enable_multilib_repo": True,
+        "enable_multilib_repo": False,
         "add_chaotic_aur_repo": False,
         "add_blackarch_repo": False,
-        "remove_sudo_password": True,
+        "remove_sudo_password": False,
         "enable_os_prober": False,
         "servives_to_install": [],
         "packages_to_install": [],
