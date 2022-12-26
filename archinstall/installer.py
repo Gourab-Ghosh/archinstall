@@ -67,7 +67,6 @@ class ArchInstaller:
             required_packages += ["btrfs-progs"]
         req_package_str = " ".join(required_packages)
         run_command(f"pacstrap {self.fs.temp_mount_dir} {req_package_str} --noconfirm")
-        run_command(f"pip3 install inquirer")
     
     def add_chaotic_aur_repo(self):
         run_command("pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com")
