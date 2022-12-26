@@ -5,6 +5,9 @@ from filesystem_setup import EXT4Filesystem, BTRFSFilesystem
 from config import IS_TESTING, ADD_OPTIONAL_PACKAGES
 from packages import ALL_PACKAGE_GROUPS, OPTIONAL_PACKAGES
 
+from rich.traceback import install
+install()
+
 if IS_TESTING:
     run_command = lambda command, *args, **kwargs: print(command)
     os.chroot = lambda path: print("arch-chroot " + path)
