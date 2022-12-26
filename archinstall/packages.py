@@ -1,5 +1,5 @@
 SERVICES = {
-    "basic_packages": {"pkgfile", "base-devel", "bash-completion", "yay", "rsync", "sudo", "dhcpcd", "grub", "freetype2", "fuse2", "dosfstools", "lzop", "efibootmgr", "libisoburn", "os-prober", "mtools", "linux-headers", "linux-docs"},
+    "basic_packages": {"pkgfile", "base-devel", "bash-completion", "yay", "rsync", "sudo", "networkmanager", "grub", "freetype2", "fuse2", "dosfstools", "lzop", "efibootmgr", "libisoburn", "os-prober", "mtools", "linux-headers", "linux-docs"},
     "printing_support": {"cups", "hplip"},
     "bluetooth_support": {"bluez", "bluez-utils", "bluez-hid2hci", "bluetooth-autoconnect"},
     "nvidia_drivers": {"nvidia-utils", "nvidia-settings", "nvidia-dkms"},
