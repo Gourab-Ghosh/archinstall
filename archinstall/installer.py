@@ -58,7 +58,7 @@ class ArchInstaller:
             "base",
             "linux",
             "linux-firmware",
-            "networkmanager",
+            "dhcpcd",
             "python",
             "python-rich",
             "python-pip",
@@ -239,7 +239,7 @@ class ArchInstaller:
         time.sleep(5)
         os.chroot(self.fs.temp_mount_dir)
         time.sleep(5)
-        run_command("systemctl enable --now NetworkManager")
+        run_command("systemctl enable --now dhcpcd")
         time.sleep(5)
         print(os.getcwd())
         time.sleep(5)
