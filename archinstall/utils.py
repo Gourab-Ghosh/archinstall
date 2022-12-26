@@ -5,7 +5,7 @@ def run_command(command, get_output = False):
     if get_output:
         return subprocess.getoutput(command)
     print(f"\nRunning command: {command}\n")
-    time.sleep(5)
+    # time.sleep(5)
     os.system(command)
 
 def get_locales():
