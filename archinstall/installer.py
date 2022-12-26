@@ -58,6 +58,7 @@ class ArchInstaller:
             "base",
             "linux",
             "linux-firmware",
+            "networkmanager",
             "python",
             "python-rich",
             "python-pip",
@@ -235,6 +236,7 @@ class ArchInstaller:
         print(os.getcwd())
         os.chdir(os.path.join(self.fs.temp_mount_dir, "root"))
         os.chroot(self.fs.temp_mount_dir)
+        run_command("systemctl enable --now NetworkManager")
         print(os.getcwd())
         self.enable_parallel_downloads()
         if self.response["enable_multilib_repo"]:
