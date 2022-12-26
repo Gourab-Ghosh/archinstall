@@ -227,7 +227,7 @@ class ArchInstaller:
         self.enable_parallel_downloads()
         self.install_linux_base()
         run_command(f"genfstab -U {self.fs.temp_mount_dir} >> {self.fs.temp_mount_dir}/etc/fstab")
-        run_command(f"cp -r {os.path.split(os.path.split(__file__)[0])[0]} {self.fs.temp_mount_dir}")
+        run_command(f"cp -r {os.path.split(os.path.split(__file__)[0])[0]} {self.fs.temp_mount_dir}/root/")
         print(os.getcwd())
         os.chroot(self.fs.temp_mount_dir)
         print(os.getcwd())
