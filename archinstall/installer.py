@@ -8,8 +8,6 @@ from packages import ALL_PACKAGE_GROUPS, OPTIONAL_PACKAGES
 if IS_TESTING:
     run_command = lambda command, *args, **kwargs: print(command)
     os.chroot = lambda path: print("arch-chroot " + path)
-    os.chdir = lambda path: print("cd " + path)
-    os.chdir = lambda path: print("cd " + path)
 
 disk_mount_password_problem_text = """
 
@@ -47,10 +45,24 @@ class ArchInstaller:
         run_command(full_command)
 
     def enable_parallel_downloads(self, pacman_conf_file = "/etc/pacman.conf"):
-        run_command(f"sed -i \"s/#ParallelDownloads/ParallelDownloads/g\" {pacman_conf_file}")
+        run_command(f"sed -i \"s/# ParallelDownloads/ParallelDownloads/g\" {pacman_conf_file}")
 
     def enable_multilib(self, pacman_conf_file = "/etc/pacman.conf"):
         run_command(f"sed -i \"/\[multilib\]/,/Include/\"\'s/^#//\' {pacman_conf_file}")
+    
+    def install_linux_base(self):
+        required_packages = [
+            "base",
+            "linux",
+            "linux-firmware",
+            "python",
+            "python-rich",
+            "python-inquirer",
+        ]
+        if self.response["filesystem"] == "BTRFS":
+            required_packages += ["btrfs-progs"]
+        req_package_str = " ".join(required_packages)
+        run_command(f"pacstrap {self.fs.temp_mount_dir} {req_package_str} --noconfirm")
     
     def add_chaotic_aur_repo(self):
         run_command("pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com")
@@ -117,7 +129,7 @@ class ArchInstaller:
         self.set_password(root_password)
 
     def get_needed_packages(self):
-        needed_packages = ALL_PACKAGE_GROUPS["base_packages"] | ALL_PACKAGE_GROUPS["basic_packages"]
+        needed_packages = set(ALL_PACKAGE_GROUPS["basic_packages"])
         servives_to_install = self.response["servives_to_install"]
         all_groups = servives_to_install.copy()
         all_groups += self.response["packages_to_install"]
@@ -125,10 +137,9 @@ class ArchInstaller:
         all_groups.append(self.response["display_manager"])
         all_groups += self.response["additional_kernels"]
         for gpu_type in self.response["gpu_types"]:
-            all_groups.append(gpu_type + " Drivers")
             if gpu_type == "AMD":
                 continue
-            all_groups.append("VLC " + gpu_type)
+            all_groups.append(gpu_type + " Drivers")
         for service in all_groups:
             key = service.lower().replace(" ", "_")
             needed_packages.update(ALL_PACKAGE_GROUPS[key])
@@ -136,8 +147,8 @@ class ArchInstaller:
             needed_packages.add("bluez-cups")
         if ADD_OPTIONAL_PACKAGES:
             needed_packages.update(OPTIONAL_PACKAGES)
-        if self.response["filesystem"] == "BTRFS":
-            needed_packages.add("btrfs-progs")
+        if not self.response["add_blackarch_repo"]:
+            needed_packages.remove("yay")
         needed_packages = sorted(list(needed_packages))
         return needed_packages
 
@@ -214,15 +225,8 @@ class ArchInstaller:
         self.fs.format_partitions()
         self.fs.mount_partitions()
         self.enable_parallel_downloads()
-        packages_to_install = self.get_needed_packages()
-        packages_to_install_text = " ".join(packages_to_install)
-        run_command(f"pacstrap {self.fs.temp_mount_dir} {packages_to_install_text}")
+        self.install_linux_base()
         run_command(f"genfstab -U {self.fs.temp_mount_dir} >> {self.fs.temp_mount_dir}/etc/fstab")
-        run_command(f"cp -r {os.path.split(os.path.split(__file__)[0])[0]} {self.fs.temp_mount_dir}/root/")
-        chdir_path = os.path.join(self.fs.temp_mount_dir, os.getcwd()[1:])
-        if not os.path.isdir(chdir_path):
-            os.makedirs(chdir_path)
-        os.chdir(chdir_path)
         os.chroot(self.fs.temp_mount_dir)
         self.enable_parallel_downloads()
         if self.response["enable_multilib_repo"]:
@@ -240,6 +244,9 @@ class ArchInstaller:
         self.setup_locale()
         self.setup_hostname()
         self.setup_username_and_password()
+        packages_to_install = self.get_needed_packages()
+        packages_to_install_text = " ".join(packages_to_install)
+        run_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
         if self.response["remove_sudo_password"]:
             run_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
         if self.response["filesystem"] == "BTRFS":
@@ -276,31 +283,6 @@ if __name__ == "__main__":
         "root_password": "pass",
         "timezone": "/usr/share/zoneinfo/Asia/Kolkata",
         "gpu_types": ["NVIDIA"],
-    }
-
-    dummy_response = {
-        "boot_partition": "/dev/sda1",
-        "root_partition": "/dev/sda2",
-        "home_partition": None,
-        "swap_type": "No Swap",
-        "filesystem": "BTRFS",
-        "additional_kernels": [],
-        "desktop_environments": ["KDE"],
-        "display_manager": "SDDM",
-        "locales": ["en_US.UTF-8 UTF-8"],
-        "enable_multilib_repo": False,
-        "add_chaotic_aur_repo": False,
-        "add_blackarch_repo": False,
-        "remove_sudo_password": False,
-        "enable_os_prober": False,
-        "servives_to_install": [],
-        "packages_to_install": [],
-        "username": "gg8576",
-        "pc_name": "archbtrfs",
-        "password": "pass",
-        "root_password": "pass",
-        "timezone": "/usr/share/zoneinfo/Asia/Kolkata",
-        "gpu_types": [],
     }
 
     installer = ArchInstaller(dummy_response)
