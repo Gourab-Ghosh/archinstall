@@ -1,4 +1,4 @@
-import os, time
+import os
 from rich import print
 from utils import run_command
 from filesystem_setup import EXT4Filesystem, BTRFSFilesystem
@@ -247,7 +247,6 @@ class ArchInstaller:
         packages_to_install = self.get_needed_packages()
         packages_to_install_text = " ".join(packages_to_install)
         self.run_chroot_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
-        input("\nPress <enter> to continue\n")
         if self.response["add_chaotic_aur_repo"]:
             self.add_chaotic_aur_repo()
         if self.response["remove_sudo_password"]:
