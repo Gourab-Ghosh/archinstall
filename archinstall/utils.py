@@ -61,5 +61,5 @@ def get_gpu_types():
     return gpu_types
 
 def add_breakpoint():
-    print("Press <ENTER> to continue")
+    print("\nPress <ENTER> to continue")
     input()
