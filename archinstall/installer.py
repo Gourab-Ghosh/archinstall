@@ -163,7 +163,6 @@ class ArchInstaller:
             line_to_replace = req_line
             new_line = req_line.replace("(", "({").replace(")", "})").format(" ".join(modules + ["btrfs"]))
             run_command(f"sed -i \"s/{line_to_replace}/{new_line}/g\" {mkinitcpio_conf_dir}")
-            time.sleep(20)
             kernels = ["linux"] + [kernel.lower().replace(" ", "-") for kernel in self.response["additional_kernels"]]
             kernels_text = " ".join(kernels)
             self.run_chroot_command(f"mkinitcpio -p {kernels_text}")
@@ -230,13 +229,10 @@ class ArchInstaller:
         self.enable_parallel_downloads(self.fs.temp_mount_dir)
         if self.response["enable_multilib_repo"]:
             self.enable_multilib(self.fs.temp_mount_dir)
-            time.sleep(20)
         if self.response["add_blackarch_repo"]:
             self.add_blackarch_repo()
-            time.sleep(20)
         if "Sublime Text" in self.response["packages_to_install"]:
             self.add_sublime_text_repo()
-            time.sleep(20)
         self.run_chroot_command("pacman -Syy archlinux-keyring --noconfirm")
         if self.response["swap_type"] == "Swap to File":
             self.generate_swap_file()
@@ -252,7 +248,6 @@ class ArchInstaller:
             time.sleep(20)
         if self.response["remove_sudo_password"]:
             self.run_chroot_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
-            time.sleep(20)
         if self.response["filesystem"] == "BTRFS":
             self.update_mkinitcpio_conf(self.fs.temp_mount_dir)
         self.setup_grub()
