@@ -114,6 +114,7 @@ class ArchInstaller:
         if user:
             command += f" {user}"
         self.run_chroot_command(command)
+        time.sleep(20)
 
     def setup_username_and_password(self):
         username = self.response["username"]
