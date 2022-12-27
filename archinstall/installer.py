@@ -1,4 +1,4 @@
-import os
+import os, time
 from rich import print
 from utils import run_command
 from filesystem_setup import EXT4Filesystem, BTRFSFilesystem
@@ -239,9 +239,13 @@ class ArchInstaller:
         if self.response["swap_type"] == "Swap to File":
             self.generate_swap_file()
         self.setup_timezone()
+        time.sleep(5)
         self.setup_locale()
+        time.sleep(5)
         self.setup_hostname()
+        time.sleep(5)
         self.setup_username_and_password()
+        time.sleep(5)
         packages_to_install = self.get_needed_packages()
         packages_to_install_text = " ".join(packages_to_install)
         self.run_chroot_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
@@ -264,7 +268,7 @@ if __name__ == "__main__":
         # "swap_type": "Swap to Partition /dev/nvme0n1p3",
         "filesystem": "BTRFS",
         "additional_kernels": ["Linux Zen", "Linux LTS", "Linux Hardened"],
-        "desktop_environments": ["KDE"],
+        "desktop_environments": ["i3"],
         "display_manager": "SDDM",
         "locales": ["en_US.UTF-8 UTF-8"],
         # "locales": ["zu_ZA ISO-8859-1"],
