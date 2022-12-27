@@ -59,3 +59,7 @@ def get_gpu_types():
                 gpu_types.add(_type.upper())
     gpu_types = sorted(list(gpu_types))
     return gpu_types
+
+def add_breakpoint():
+    print("Press <ENTER> to continue")
+    input()
