@@ -64,7 +64,7 @@ class ArchInstaller:
     def add_chaotic_aur_repo(self):
         self.run_chroot_command("pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com")
         self.run_chroot_command("pacman-key --lsign-key FBA220DFC880C036")
-        self.run_chroot_command("pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'")
+        self.run_chroot_command("pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm")
         self.run_chroot_command("echo \"\" | tee -a /etc/pacman.conf")
         self.run_chroot_command("echo \"[chaotic-aur]\" | tee -a /etc/pacman.conf")
         self.run_chroot_command("echo \"Include = /etc/pacman.d/chaotic-mirrorlist\" | tee -a /etc/pacman.conf")
@@ -231,9 +231,6 @@ class ArchInstaller:
         if self.response["enable_multilib_repo"]:
             self.enable_multilib(self.fs.temp_mount_dir)
             time.sleep(20)
-        if self.response["add_chaotic_aur_repo"]:
-            self.add_chaotic_aur_repo()
-            time.sleep(20)
         if self.response["add_blackarch_repo"]:
             self.add_blackarch_repo()
             time.sleep(20)
@@ -250,6 +247,9 @@ class ArchInstaller:
         packages_to_install = self.get_needed_packages()
         packages_to_install_text = " ".join(packages_to_install)
         self.run_chroot_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
+        if self.response["add_chaotic_aur_repo"]:
+            self.add_chaotic_aur_repo()
+            time.sleep(20)
         if self.response["remove_sudo_password"]:
             self.run_chroot_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
             time.sleep(20)
