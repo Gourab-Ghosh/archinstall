@@ -251,12 +251,17 @@ class ArchInstaller:
         self.run_chroot_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
         if self.response["remove_sudo_password"]:
             self.run_chroot_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
+            time.sleep(5)
         if self.response["filesystem"] == "BTRFS":
             self.update_mkinitcpio_conf()
+            time.sleep(5)
         self.setup_grub()
+        time.sleep(5)
         self.enable_services()
+        time.sleep(5)
         if "NVIDIA" in self.response["gpu_types"]:
             self.run_chroot_command("nvidia-xconfig")
+            time.sleep(5)
         self.fix_disk_mount_password_problem(self.fs.temp_mount_dir)
 
 if __name__ == "__main__":
