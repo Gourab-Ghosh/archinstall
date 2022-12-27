@@ -45,7 +45,7 @@ class ArchInstaller:
         run_command(full_command)
 
     def enable_parallel_downloads(self, pacman_conf_file = "/etc/pacman.conf"):
-        run_command(f"sed -i \"s/# ParallelDownloads/ParallelDownloads/g\" {pacman_conf_file}")
+        run_command(f"sed -i \"s/#ParallelDownloads/ParallelDownloads/g\" {pacman_conf_file}")
 
     def enable_multilib(self, pacman_conf_file = "/etc/pacman.conf"):
         run_command(f"sed -i \"/\[multilib\]/,/Include/\"\'s/^#//\' {pacman_conf_file}")
