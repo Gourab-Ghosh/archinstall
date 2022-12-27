@@ -138,6 +138,8 @@ class ArchInstaller:
             if gpu_type == "AMD":
                 continue
             all_groups.append("VLC " + gpu_type)
+        if self.response["add_blackarch_repo"]:
+            all_groups.append("Blackarch Packages")
         for service in all_groups:
             key = service.lower().replace(" ", "_")
             needed_packages.update(ALL_PACKAGE_GROUPS[key])
@@ -145,8 +147,6 @@ class ArchInstaller:
             needed_packages.add("bluez-cups")
         if ADD_OPTIONAL_PACKAGES:
             needed_packages.update(OPTIONAL_PACKAGES)
-        if self.response["filesystem"] == "BTRFS":
-            needed_packages.add("btrfs-progs")
         needed_packages = sorted(list(needed_packages))
         return needed_packages
 
@@ -283,7 +283,7 @@ if __name__ == "__main__":
         "gpu_types": ["NVIDIA"],
     }
 
-    dummy_response = {
+    minimum_response = {
         "boot_partition": "/dev/sda1",
         "root_partition": "/dev/sda2",
         "home_partition": None,
@@ -308,5 +308,32 @@ if __name__ == "__main__":
         "gpu_types": [],
     }
 
-    installer = ArchInstaller(dummy_response)
+    maximum_response = {
+    "boot_partition": "/dev/sda1",
+    "root_partition": "/dev/sda2",
+    "home_partition": None,
+    "swap_type": "Swap to File",
+    "filesystem": "BTRFS",
+    "gpu_types": ["NVIDIA", "AMD", "Intel"],
+    "additional_kernels": ["Linux Zen", "Linux LTS", "Linux Hardened"],
+    "desktop_environments": ["KDE", "Gnome", "i3", "Cinnamon", "lxqt", "lxde", "xfce"],
+    "display_manager": "SDDM",
+    "locales": ["en_US.UTF-8 UTF-8"],
+    "enable_multilib_repo": True,
+    "add_chaotic_aur_repo": True,
+    "add_blackarch_repo": True,
+    "remove_sudo_password": True,
+    "enable_os_prober": True,
+    "servives_to_install": ["Printing Support", "Bluetooth Support"],
+    "packages_to_install": ["Visual Studio Code", "Sublime Text", "Firefox", "VLC", "Gimp", "Thunderbird"],
+    "username": "user",
+    "pc_name": "archlinux",
+    "password": "pass",
+    "root_password": "pass",
+    "timezone": "/usr/share/zoneinfo/Asia/Kolkata"
+}
+
+    installer = ArchInstaller(minimum_response)
+    # installer = ArchInstaller(dummy_response)
+    # installer = ArchInstaller(maximum_response)
     installer.install()
