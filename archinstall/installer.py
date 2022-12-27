@@ -204,7 +204,8 @@ class ArchInstaller:
         if "Printing Support" in self.response["servives_to_install"]:
             services.append("cups")
         if "Bluetooth Support" in self.response["servives_to_install"]:
-            services += ["bluetooth", "bluetooth-autoconnect"]
+            # services += ["bluetooth", "bluetooth-autoconnect"]
+            services += ["bluetooth"]
         services.append(self.response["display_manager"].lower())
         services.sort(key = lambda _str: _str.lower())
         services_text = " ".join(services)
@@ -236,7 +237,7 @@ class ArchInstaller:
             self.add_blackarch_repo()
         if "Sublime Text" in self.response["packages_to_install"]:
             self.add_sublime_text_repo()
-        self.run_chroot_command("pacman -Syy archlinux-keyring --noconfirm")
+        self.run_chroot_command("pacman -Sy archlinux-keyring --noconfirm")
         if self.response["swap_type"] == "Swap to File":
             self.generate_swap_file()
         self.setup_timezone()
