@@ -126,7 +126,7 @@ class ArchInstaller:
         self.set_password(root_password)
 
     def get_needed_packages(self):
-        needed_packages = ALL_PACKAGE_GROUPS["base_packages"] | ALL_PACKAGE_GROUPS["basic_packages"]
+        needed_packages = ALL_PACKAGE_GROUPS["basic_packages"].copy()
         servives_to_install = self.response["servives_to_install"]
         all_groups = servives_to_install.copy()
         all_groups += self.response["packages_to_install"]
@@ -147,6 +147,9 @@ class ArchInstaller:
             needed_packages.add("bluez-cups")
         if ADD_OPTIONAL_PACKAGES:
             needed_packages.update(OPTIONAL_PACKAGES)
+        for package in ["visual-studio-code-bin", "bluetooth-autoconnect"]:
+            if package in needed_packages:
+                needed_packages.remove(package)
         needed_packages = sorted(list(needed_packages))
         return needed_packages
 
@@ -338,3 +341,9 @@ if __name__ == "__main__":
     # installer = ArchInstaller(dummy_response)
     installer = ArchInstaller(maximum_response)
     installer.install()
+
+
+
+# Packages not found: visual-studio-code-bin, bluetooth-autoconnect
+# firezilla
+
