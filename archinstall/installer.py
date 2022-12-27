@@ -8,6 +8,8 @@ from packages import ALL_PACKAGE_GROUPS, OPTIONAL_PACKAGES
 if IS_TESTING:
     run_command = lambda command, *args, **kwargs: print(command)
     os.chroot = lambda path: print("arch-chroot " + path)
+    os.chdir = lambda path: print("cd " + path)
+    os.chdir = lambda path: print("cd " + path)
 
 disk_mount_password_problem_text = """
 
@@ -39,96 +41,92 @@ class ArchInstaller:
         if self.response["swap_type"].startswith("Swap to Partition"):
             swap_partition = self.response["swap_type"][18:]
         self.fs = self.fs_classes[self.response["filesystem"]](self.response["boot_partition"], self.response["root_partition"], self.response["home_partition"], swap_partition)
-  
+
     def run_chroot_command(self, command):
-        full_command = f"arch-chroot {self.fs.temp_mount_dir} /bin/bash -c {repr(command)}"
+        full_command = f"arch-chroot {self.fs.temp_mount_dir} {command}"
         run_command(full_command)
 
-    def enable_parallel_downloads(self, pacman_conf_file = "/etc/pacman.conf"):
-        run_command(f"sed -i \"s/#ParallelDownloads/ParallelDownloads/g\" {pacman_conf_file}")
+    def enable_parallel_downloads(self, root_dir = "/"):
+        pacman_conf_file = os.path.join(root_dir, "etc/pacman.conf")
+        run_command(f"sed -i \"s/# ParallelDownloads/ParallelDownloads/g\" {pacman_conf_file}")
 
-    def enable_multilib(self, pacman_conf_file = "/etc/pacman.conf"):
+    def enable_multilib(self, root_dir = "/"):
+        pacman_conf_file = os.path.join(root_dir, "etc/pacman.conf")
         run_command(f"sed -i \"/\[multilib\]/,/Include/\"\'s/^#//\' {pacman_conf_file}")
-    
+
     def install_linux_base(self):
-        required_packages = [
-            "base",
-            "linux",
-            "linux-firmware",
-            "python",
-            "python-rich",
-        ]
+        required_packages = ALL_PACKAGE_GROUPS["base_packages"].copy()
         if self.response["filesystem"] == "BTRFS":
-            required_packages += ["btrfs-progs"]
-        req_package_str = " ".join(required_packages)
+            required_packages.add("btrfs-progs")
+        req_package_str = " ".join(sorted(list(required_packages)))
         run_command(f"pacstrap {self.fs.temp_mount_dir} {req_package_str} --noconfirm")
-    
+
     def add_chaotic_aur_repo(self):
-        run_command("pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com")
-        run_command("pacman-key --lsign-key FBA220DFC880C036")
-        run_command("pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'")
-        run_command("echo \"\" | tee -a /etc/pacman.conf")
-        run_command("echo \"[chaotic-aur]\" | tee -a /etc/pacman.conf")
-        run_command("echo \"Include = /etc/pacman.d/chaotic-mirrorlist\" | tee -a /etc/pacman.conf")
+        self.run_chroot_command("pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com")
+        self.run_chroot_command("pacman-key --lsign-key FBA220DFC880C036")
+        self.run_chroot_command("pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'")
+        self.run_chroot_command("echo \"\" | tee -a /etc/pacman.conf")
+        self.run_chroot_command("echo \"[chaotic-aur]\" | tee -a /etc/pacman.conf")
+        self.run_chroot_command("echo \"Include = /etc/pacman.d/chaotic-mirrorlist\" | tee -a /etc/pacman.conf")
 
     def add_blackarch_repo(self):
-        run_command("curl -O https://blackarch.org/strap.sh")
-        run_command("chmod +x strap.sh")
-        run_command("./strap.sh")
-        run_command("rm strap.sh")
+        self.run_chroot_command("curl -O https://blackarch.org/strap.sh")
+        self.run_chroot_command("chmod +x strap.sh")
+        self.run_chroot_command("./strap.sh")
+        self.run_chroot_command("rm strap.sh")
 
     def add_sublime_text_repo(self):
-        run_command("curl -O https://download.sublimetext.com/sublimehq-pub.gpg && pacman-key --add sublimehq-pub.gpg && pacman-key --lsign-key 8A8F901A && rm sublimehq-pub.gpg")
-        run_command('echo -e "\\n[sublime-text]\\nServer = https://download.sublimetext.com/arch/stable/x86_64" | sudo tee -a /etc/pacman.conf')
-    
+        self.run_chroot_command("curl -O https://download.sublimetext.com/sublimehq-pub.gpg && pacman-key --add sublimehq-pub.gpg && pacman-key --lsign-key 8A8F901A && rm sublimehq-pub.gpg")
+        self.run_chroot_command('echo -e "\\n[sublime-text]\\nServer = https://download.sublimetext.com/arch/stable/x86_64" | sudo tee -a /etc/pacman.conf')
+
     def generate_swap_file(self):
-        run_command("truncate -s 0 /swap/swapfile")
-        run_command("chattr +C /swap/swapfile")
-        run_command("btrfs property set /swap/swapfile compression none")
-        run_command("dd if=/dev/zero of=/swap/swapfile bs=3G count=8 status=progress")
-        run_command("chmod 600 /swap/swapfile")
-        run_command("mkswap /swap/swapfile")
-        run_command("swapon /swap/swapfile")
-        run_command("echo \"\" | tee -a /etc/fstab")
-        run_command("echo \"#swap\" | tee -a /etc/fstab")
-        run_command("echo \"/swap/swapfile none swap defaults 0 0\" | tee -a /etc/fstab")
+        self.run_chroot_command("truncate -s 0 /swap/swapfile")
+        self.run_chroot_command("chattr +C /swap/swapfile")
+        self.run_chroot_command("btrfs property set /swap/swapfile compression none")
+        self.run_chroot_command("dd if=/dev/zero of=/swap/swapfile bs=3G count=8 status=progress")
+        self.run_chroot_command("chmod 600 /swap/swapfile")
+        self.run_chroot_command("mkswap /swap/swapfile")
+        self.run_chroot_command("swapon /swap/swapfile")
+        self.run_chroot_command("echo \"\" | tee -a /etc/fstab")
+        self.run_chroot_command("echo \"#swap\" | tee -a /etc/fstab")
+        self.run_chroot_command("echo \"/swap/swapfile none swap defaults 0 0\" | tee -a /etc/fstab")
 
     def setup_timezone(self):
         timezone = self.response["timezone"]
-        run_command(f"ln -sf {timezone} /etc/localtime")
-        run_command("hwclock --systohc")
+        self.run_chroot_command(f"ln -sf {timezone} /etc/localtime")
+        self.run_chroot_command("hwclock --systohc")
 
     def setup_locale(self):
         for locale in self.response["locales"]:
-            run_command(f"sed -i \"s/#{locale}/{locale}/g\" /etc/locale.gen")
-        run_command("locale-gen")
+            self.run_chroot_command(f"sed -i \"s/#{locale}/{locale}/g\" /etc/locale.gen")
+        self.run_chroot_command("locale-gen")
 
     def setup_hostname(self):
         pc_name = self.response["pc_name"]
-        run_command(f"echo \"{pc_name}\" | tee -a /etc/hostname")
-        run_command("echo \"\" | tee -a /etc/hosts")
-        run_command("echo \"127.0.0.1    localhost\" | tee -a /etc/hosts")
-        run_command("echo \"::1          localhost\" | tee -a /etc/hosts")
-        run_command(f"echo \"127.0.1.1    {pc_name}.localdomain    localhost\" | tee -a /etc/hosts")
+        self.run_chroot_command(f"echo \"{pc_name}\" | tee -a /etc/hostname")
+        self.run_chroot_command("echo \"\" | tee -a /etc/hosts")
+        self.run_chroot_command("echo \"127.0.0.1    localhost\" | tee -a /etc/hosts")
+        self.run_chroot_command("echo \"::1          localhost\" | tee -a /etc/hosts")
+        self.run_chroot_command(f"echo \"127.0.1.1    {pc_name}.localdomain    localhost\" | tee -a /etc/hosts")
 
     def set_password(self, password, user = None):
         command = f"echo -en \"{password}\\n{password}\\n\" | passwd"
         if user:
             command += f" {user}"
-        run_command(command)
+        self.run_chroot_command(command)
 
     def setup_username_and_password(self):
         username = self.response["username"]
         password = self.response["password"]
         root_password = self.response["pc_name"]
         if username:
-            run_command(f"useradd -m {username}")
-            run_command(f"usermod -aG wheel,audio,video,optical,storage {username}")
+            self.run_chroot_command(f"useradd -m {username}")
+            self.run_chroot_command(f"usermod -aG wheel,audio,video,optical,storage {username}")
             self.set_password(password, username)
         self.set_password(root_password)
 
     def get_needed_packages(self):
-        needed_packages = set(ALL_PACKAGE_GROUPS["basic_packages"])
+        needed_packages = ALL_PACKAGE_GROUPS["base_packages"] | ALL_PACKAGE_GROUPS["basic_packages"]
         servives_to_install = self.response["servives_to_install"]
         all_groups = servives_to_install.copy()
         all_groups += self.response["packages_to_install"]
@@ -136,9 +134,10 @@ class ArchInstaller:
         all_groups.append(self.response["display_manager"])
         all_groups += self.response["additional_kernels"]
         for gpu_type in self.response["gpu_types"]:
+            all_groups.append(gpu_type + " Drivers")
             if gpu_type == "AMD":
                 continue
-            all_groups.append(gpu_type + " Drivers")
+            all_groups.append("VLC " + gpu_type)
         for service in all_groups:
             key = service.lower().replace(" ", "_")
             needed_packages.update(ALL_PACKAGE_GROUPS[key])
@@ -146,8 +145,8 @@ class ArchInstaller:
             needed_packages.add("bluez-cups")
         if ADD_OPTIONAL_PACKAGES:
             needed_packages.update(OPTIONAL_PACKAGES)
-        if not self.response["add_blackarch_repo"]:
-            needed_packages.remove("yay")
+        if self.response["filesystem"] == "BTRFS":
+            needed_packages.add("btrfs-progs")
         needed_packages = sorted(list(needed_packages))
         return needed_packages
 
@@ -163,10 +162,10 @@ class ArchInstaller:
             sep = " "
             line_to_replace = "MODULES=({})".format(sep.join(modules))
             new_line = "MODULES=({})".format(sep.join(modules + ["btrfs"]))
-            run_command(f"sed -i \"s/{line_to_replace}/{new_line}/g")
+            self.run_chroot_command(f"sed -i \"s/{line_to_replace}/{new_line}/g")
             kernels = ["linux"] + [kernel.lower().replace(" ", "-") for kernel in self.response["additional_kernels"]]
             kernels_text = " ".join(kernels)
-            run_command(f"mkinitcpio -p {kernels_text}")
+            self.run_chroot_command(f"mkinitcpio -p {kernels_text}")
 
     def enable_os_prober_in_grub(self):
         os_prober_enable_text = "GRUB_DISABLE_OS_PROBER=\"false\""
@@ -181,19 +180,19 @@ class ArchInstaller:
                 line_to_replace = line
                 break
         if line_to_replace:
-            run_command(f"sed -i \'s/{line_to_replace}/{os_prober_enable_text}/g\' /etc/default/grub")
+            self.run_chroot_command(f"sed -i \'s/{line_to_replace}/{os_prober_enable_text}/g\' /etc/default/grub")
         else:
-            run_command(f"echo \"\" | tee -a /etc/default/grub")
-            run_command(f"echo {repr(os_prober_enable_text)} | tee -a /etc/default/grub")
+            self.run_chroot_command(f"echo \"\" | tee -a /etc/default/grub")
+            self.run_chroot_command(f"echo {repr(os_prober_enable_text)} | tee -a /etc/default/grub")
 
     def setup_grub(self):
         bootloader_id = "Arch Linux"
         if self.response["filesystem"] == "BTRFS":
             bootloader_id += " (BTRFS)"
-        run_command(f"grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=\"{bootloader_id}\" --recheck")
+        self.run_chroot_command(f"grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=\"{bootloader_id}\" --recheck")
         if self.response["enable_os_prober"]:
             self.enable_os_prober_in_grub()
-        run_command("grub-mkconfig -o /boot/grub/grub.cfg")
+        self.run_chroot_command("grub-mkconfig -o /boot/grub/grub.cfg")
 
     def enable_services(self): # incomplete
         services = ["dhcpcd", "NetworkManager"]
@@ -206,18 +205,19 @@ class ArchInstaller:
         services.append(self.response["display_manager"].lower())
         services.sort(key = lambda _str: _str.lower())
         services_text = " ".join(services)
-        run_command(f"systemctl enable {services_text}")
+        self.run_chroot_command(f"systemctl enable {services_text}")
 
-    def fix_disk_mount_password_problem(self):
-        if not os.path.isdir("/etc/polkit-1/rules.d/"):
-            os.makedirs("/etc/polkit-1/rules.d/")
+    def fix_disk_mount_password_problem(self, root_dir = "/"):
+        rules_folder = os.path.join(root_dir, "etc/polkit-1/rules.d/")
+        if not os.path.isdir(rules_folder):
+            os.makedirs(rules_folder)
         if IS_TESTING:
             print()
-            print("Writing the following to /etc/polkit-1/rules.d/:")
+            print(f"Writing the following to {rules_folder}/10-udisks2.rules:")
             print(disk_mount_password_problem_text)
             print()
         else:
-            with open("/etc/polkit-1/rules.d/10-udisks2.rules", "w") as wf:
+            with open(f"{rules_folder}/10-udisks2.rules", "w") as wf:
                 wf.write(disk_mount_password_problem_text)
 
     def install(self):
@@ -226,17 +226,16 @@ class ArchInstaller:
         self.enable_parallel_downloads()
         self.install_linux_base()
         run_command(f"genfstab -U {self.fs.temp_mount_dir} >> {self.fs.temp_mount_dir}/etc/fstab")
-        os.chroot(self.fs.temp_mount_dir)
-        self.enable_parallel_downloads()
+        self.enable_parallel_downloads(self.fs.temp_mount_dir)
         if self.response["enable_multilib_repo"]:
-            self.enable_multilib()
+            self.enable_multilib(self.fs.temp_mount_dir)
         if self.response["add_chaotic_aur_repo"]:
             self.add_chaotic_aur_repo()
         if self.response["add_blackarch_repo"]:
             self.add_blackarch_repo()
         if "Sublime Text" in self.response["packages_to_install"]:
             self.add_sublime_text_repo()
-        run_command("pacman -Syy archlinux-keyring --noconfirm")
+        self.run_chroot_command("pacman -Syy archlinux-keyring --noconfirm")
         if self.response["swap_type"] == "Swap to File":
             self.generate_swap_file()
         self.setup_timezone()
@@ -245,16 +244,16 @@ class ArchInstaller:
         self.setup_username_and_password()
         packages_to_install = self.get_needed_packages()
         packages_to_install_text = " ".join(packages_to_install)
-        run_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
+        self.run_chroot_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
         if self.response["remove_sudo_password"]:
-            run_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
+            self.run_chroot_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
         if self.response["filesystem"] == "BTRFS":
             self.update_mkinitcpio_conf()
         self.setup_grub()
         self.enable_services()
         if "NVIDIA" in self.response["gpu_types"]:
-            run_command("nvidia-xconfig")
-        self.fix_disk_mount_password_problem()
+            self.run_chroot_command("nvidia-xconfig")
+        self.fix_disk_mount_password_problem(self.fs.temp_mount_dir)
 
 if __name__ == "__main__":
     dummy_response = {
@@ -283,7 +282,7 @@ if __name__ == "__main__":
         "timezone": "/usr/share/zoneinfo/Asia/Kolkata",
         "gpu_types": ["NVIDIA"],
     }
-    
+
     dummy_response = {
         "boot_partition": "/dev/sda1",
         "root_partition": "/dev/sda2",
