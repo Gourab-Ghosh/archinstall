@@ -48,7 +48,7 @@ class ArchInstaller:
 
     def enable_parallel_downloads(self, root_dir = "/"):
         pacman_conf_file = os.path.join(root_dir, "etc/pacman.conf")
-        run_command(f"sed -i \"s/# ParallelDownloads/ParallelDownloads/g\" {pacman_conf_file}")
+        run_command(f"sed -i \"s/#ParallelDownloads/ParallelDownloads/g\" {pacman_conf_file}")
 
     def enable_multilib(self, root_dir = "/"):
         pacman_conf_file = os.path.join(root_dir, "etc/pacman.conf")
