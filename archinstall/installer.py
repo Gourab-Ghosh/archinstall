@@ -266,6 +266,31 @@ class ArchInstaller:
         self.fix_disk_mount_password_problem(self.fs.temp_mount_dir)
 
 if __name__ == "__main__":
+    minimum_response = {
+        "boot_partition": "/dev/sda1",
+        "root_partition": "/dev/sda2",
+        "home_partition": None,
+        "swap_type": "No Swap",
+        "filesystem": "BTRFS",
+        "additional_kernels": [],
+        "desktop_environments": ["i3"],
+        "display_manager": "SDDM",
+        "locales": ["en_US.UTF-8 UTF-8"],
+        "enable_multilib_repo": False,
+        "add_chaotic_aur_repo": False,
+        "add_blackarch_repo": False,
+        "remove_sudo_password": False,
+        "enable_os_prober": False,
+        "servives_to_install": [],
+        "packages_to_install": [],
+        "username": "gg8576",
+        "pc_name": "archbtrfs",
+        "password": "pass",
+        "root_password": "pass",
+        "timezone": "/usr/share/zoneinfo/Asia/Kolkata",
+        "gpu_types": [],
+    }
+
     dummy_response = {
         "boot_partition": "/dev/nvme0n1p1",
         "root_partition": "/dev/nvme0n1p2",
@@ -274,7 +299,7 @@ if __name__ == "__main__":
         # "swap_type": "Swap to Partition /dev/nvme0n1p3",
         "filesystem": "BTRFS",
         "additional_kernels": ["Linux Zen", "Linux LTS", "Linux Hardened"],
-        "desktop_environments": ["i3"],
+        "desktop_environments": ["KDE"],
         "display_manager": "SDDM",
         "locales": ["en_US.UTF-8 UTF-8"],
         # "locales": ["zu_ZA ISO-8859-1"],
@@ -291,31 +316,6 @@ if __name__ == "__main__":
         "root_password": "pass",
         "timezone": "/usr/share/zoneinfo/Asia/Kolkata",
         "gpu_types": ["NVIDIA"],
-    }
-
-    minimum_response = {
-        "boot_partition": "/dev/sda1",
-        "root_partition": "/dev/sda2",
-        "home_partition": None,
-        "swap_type": "No Swap",
-        "filesystem": "BTRFS",
-        "additional_kernels": [],
-        "desktop_environments": ["KDE"],
-        "display_manager": "SDDM",
-        "locales": ["en_US.UTF-8 UTF-8"],
-        "enable_multilib_repo": False,
-        "add_chaotic_aur_repo": False,
-        "add_blackarch_repo": False,
-        "remove_sudo_password": False,
-        "enable_os_prober": False,
-        "servives_to_install": [],
-        "packages_to_install": [],
-        "username": "gg8576",
-        "pc_name": "archbtrfs",
-        "password": "pass",
-        "root_password": "pass",
-        "timezone": "/usr/share/zoneinfo/Asia/Kolkata",
-        "gpu_types": [],
     }
 
     maximum_response = {
