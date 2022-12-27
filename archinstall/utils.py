@@ -2,6 +2,7 @@ import os, subprocess
 from GPUtil import getGPUs
 
 def run_command(command, get_output = False):
+    print(f"\n{command}\n")
     if get_output:
         return subprocess.getoutput(command)
     os.system(command)
