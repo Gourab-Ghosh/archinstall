@@ -10,10 +10,10 @@ SERVICES = {
 }
 
 PACKAGES = {
-    "visual_studio_code": {"visual-studio-code-bin", "glib2", "libdbusmenu-glib", "org.freedesktop.secrets", "icu69"},
+    "visual_studio_code": {"visual-studio-code-bin", "glib2", "libdbusmenu-glib", "icu69"}, # "org.freedesktop.secrets"
     "sublime_text": {"sublime-text", "gksu"},
     "firefox": {"sublime-text", "gksu"},
-    "vlc": {"vlc", "avahi", "aom", "gst-plugins-base-libs", "dav1d", "libdvdcss", "libavc1394", "libdc1394", "kwallet", "libbluray", "flac", "twolame", "libgme", "vcdimager", "libmtp", "smbclient", "libcdio", "gnu-free-fonts", "ttf-dejavu", "libssh2", "libnfs", "mpg123", "protobuf", "libmicrodns", "lua52-socket", "libdvdread", "libdvdnav", "libogg", "libshout", "libmodplug", "libvpx", "libvorbis", "speex", "opus", "libtheora", "libpng", "libjpeg-turbo", "librsvg", "x264", "x265", "zvbi", "libass", "libkate", "libtiger", "sdl_image", "srt", "aalib", "libcaca", "libpulse", "alsa-lib", "jack", "libsamplerate", "libsoxr", "lirc", "libgoom2", "projectm", "ncurses", "libnotify", "gtk3", "aribb24", "aribb25", "pcsclite", "live-media"},
+    "vlc": {"vlc", "avahi", "aom", "gst-plugins-base-libs", "dav1d", "libdvdcss", "libavc1394", "libdc1394", "kwallet", "libbluray", "flac", "twolame", "libgme", "vcdimager", "libmtp", "systemd-libs", "smbclient", "libcdio", "gnu-free-fonts", "ttf-dejavu", "libssh2", "libnfs", "mpg123", "protobuf", "libmicrodns", "lua52-socket", "libdvdread", "libdvdnav", "libogg", "libshout", "libmodplug", "libvpx", "libvorbis", "speex", "opus", "libtheora", "libpng", "libjpeg-turbo", "librsvg", "x264", "x265", "zvbi", "libass", "libkate", "libtiger", "sdl_image", "srt", "aalib", "libcaca", "libpulse", "alsa-lib", "jack", "libsamplerate", "libsoxr", "lirc", "libgoom2", "projectm", "ncurses", "libnotify", "gtk3", "aribb24", "aribb25", "pcsclite", "live-media"},
     "vlc_nvidia": {"libva-vdpau-driver"},
     "vlc_intel": {"libva-intel-driver"},
     "gimp": {"gimp", "poppler-glib", "alsa-lib", "curl", "ghostscript", "gvfs"},
