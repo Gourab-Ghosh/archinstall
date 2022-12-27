@@ -247,9 +247,9 @@ class ArchInstaller:
         packages_to_install = self.get_needed_packages()
         packages_to_install_text = " ".join(packages_to_install)
         self.run_chroot_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
+        input("\nPress <enter> to continue\n")
         if self.response["add_chaotic_aur_repo"]:
             self.add_chaotic_aur_repo()
-            time.sleep(20)
         if self.response["remove_sudo_password"]:
             self.run_chroot_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
         if self.response["filesystem"] == "BTRFS":
