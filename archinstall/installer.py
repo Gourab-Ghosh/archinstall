@@ -163,6 +163,7 @@ class ArchInstaller:
             line_to_replace = "MODULES=({})".format(sep.join(modules))
             new_line = "MODULES=({})".format(sep.join(modules + ["btrfs"]))
             self.run_chroot_command(f"sed -i \"s/{line_to_replace}/{new_line}/g")
+            time.sleep(20)
             kernels = ["linux"] + [kernel.lower().replace(" ", "-") for kernel in self.response["additional_kernels"]]
             kernels_text = " ".join(kernels)
             self.run_chroot_command(f"mkinitcpio -p {kernels_text}")
@@ -249,7 +250,6 @@ class ArchInstaller:
             self.run_chroot_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
         if self.response["filesystem"] == "BTRFS":
             self.update_mkinitcpio_conf()
-            time.sleep(20)
         self.setup_grub()
         self.enable_services()
         if "NVIDIA" in self.response["gpu_types"]:
