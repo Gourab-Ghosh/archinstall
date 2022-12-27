@@ -77,7 +77,7 @@ class ArchInstaller:
 
     def add_sublime_text_repo(self):
         self.run_chroot_command("curl -O https://download.sublimetext.com/sublimehq-pub.gpg && pacman-key --add sublimehq-pub.gpg && pacman-key --lsign-key 8A8F901A && rm sublimehq-pub.gpg")
-        self.run_chroot_command('echo -e "\\n[sublime-text]\\nServer = https://download.sublimetext.com/arch/stable/x86_64" | sudo tee -a /etc/pacman.conf')
+        self.run_chroot_command('echo -e "\\n[sublime-text]\\nServer = https://download.sublimetext.com/arch/stable/x86_64" | tee -a /etc/pacman.conf')
 
     def generate_swap_file(self):
         self.run_chroot_command("truncate -s 0 /swap/swapfile")
