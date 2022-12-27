@@ -150,8 +150,9 @@ class ArchInstaller:
         needed_packages = sorted(list(needed_packages))
         return needed_packages
 
-    def update_mkinitcpio_conf(self):
-        with open("/etc/mkinitcpio.conf", "r") as rf:
+    def update_mkinitcpio_conf(self, root_dir = "/"):
+        mkinitcpio_conf_dir = os.path.join(root_dir, "etc/mkinitcpio.conf")
+        with open(mkinitcpio_conf_dir, "r") as rf:
             data = rf.read()
         for line in data.splitlines():
             if line.startswith("MODULES"):
@@ -159,10 +160,9 @@ class ArchInstaller:
                 break
         modules = req_line[9:-1].split()
         if "btrfs" not in modules or IS_TESTING:
-            sep = " "
-            line_to_replace = "MODULES=({})".format(sep.join(modules))
-            new_line = "MODULES=({})".format(sep.join(modules + ["btrfs"]))
-            self.run_chroot_command(f"sed -i \"s/{line_to_replace}/{new_line}/g")
+            line_to_replace = req_line
+            new_line = req_line.replace("(", "({").replace(")", "})").format(" ".join(modules + ["btrfs"]))
+            run_command(f"sed -i \"s/{line_to_replace}/{new_line}/g\" {mkinitcpio_conf_dir}")
             time.sleep(20)
             kernels = ["linux"] + [kernel.lower().replace(" ", "-") for kernel in self.response["additional_kernels"]]
             kernels_text = " ".join(kernels)
@@ -249,7 +249,7 @@ class ArchInstaller:
         if self.response["remove_sudo_password"]:
             self.run_chroot_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
         if self.response["filesystem"] == "BTRFS":
-            self.update_mkinitcpio_conf()
+            self.update_mkinitcpio_conf(self.fs.temp_mount_dir)
         self.setup_grub()
         self.enable_services()
         if "NVIDIA" in self.response["gpu_types"]:
