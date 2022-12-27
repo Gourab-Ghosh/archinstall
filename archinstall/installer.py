@@ -230,12 +230,16 @@ class ArchInstaller:
         self.enable_parallel_downloads(self.fs.temp_mount_dir)
         if self.response["enable_multilib_repo"]:
             self.enable_multilib(self.fs.temp_mount_dir)
+            time.sleep(20)
         if self.response["add_chaotic_aur_repo"]:
             self.add_chaotic_aur_repo()
+            time.sleep(20)
         if self.response["add_blackarch_repo"]:
             self.add_blackarch_repo()
+            time.sleep(20)
         if "Sublime Text" in self.response["packages_to_install"]:
             self.add_sublime_text_repo()
+            time.sleep(20)
         self.run_chroot_command("pacman -Syy archlinux-keyring --noconfirm")
         if self.response["swap_type"] == "Swap to File":
             self.generate_swap_file()
@@ -248,6 +252,7 @@ class ArchInstaller:
         self.run_chroot_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
         if self.response["remove_sudo_password"]:
             self.run_chroot_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
+            time.sleep(20)
         if self.response["filesystem"] == "BTRFS":
             self.update_mkinitcpio_conf(self.fs.temp_mount_dir)
         self.setup_grub()
@@ -334,7 +339,7 @@ if __name__ == "__main__":
     "timezone": "/usr/share/zoneinfo/Asia/Kolkata"
 }
 
-    installer = ArchInstaller(minimum_response)
+    # installer = ArchInstaller(minimum_response)
     # installer = ArchInstaller(dummy_response)
-    # installer = ArchInstaller(maximum_response)
+    installer = ArchInstaller(maximum_response)
     installer.install()
