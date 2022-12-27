@@ -43,7 +43,7 @@ class ArchInstaller:
         self.fs = self.fs_classes[self.response["filesystem"]](self.response["boot_partition"], self.response["root_partition"], self.response["home_partition"], swap_partition)
 
     def run_chroot_command(self, command):
-        full_command = f"arch-chroot {self.fs.temp_mount_dir} {command}"
+        full_command = f"arch-chroot {self.fs.temp_mount_dir} /bin/sh -c {repr(command)}"
         run_command(full_command)
 
     def enable_parallel_downloads(self, root_dir = "/"):
