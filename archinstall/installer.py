@@ -245,7 +245,7 @@ class ArchInstaller:
         self.setup_locale()
         self.setup_hostname()
         self.setup_username_and_password()
-        packages_to_install, chaoric_aur_packages = self.get_needed_packages()
+        packages_to_install, chaotic_aur_packages = self.get_needed_packages()
         packages_to_install_text = " ".join(packages_to_install)
         self.run_chroot_command("pacman -Syu --noconfirm")
         self.run_chroot_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
