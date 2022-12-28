@@ -5,7 +5,7 @@ from GPUtil import getGPUs
 console = Console()
 
 def run_command(command, get_output = False):
-    console.log(f"\nRunning command: {command}\n")
+    console.log(f"Running command: {command}")
     if get_output:
         return subprocess.getoutput(command)
     os.system(command)
