@@ -166,6 +166,7 @@ def ask_for_partition():
             print()
         else:
             run_command("cfdisk " + disk_to_partition)
+            run_command("clear")
     run_command("lsblk")
     print()
     if confirm("Do you want to partition your disk(s)?", default = False, render = DEFAULT_RENDER):
