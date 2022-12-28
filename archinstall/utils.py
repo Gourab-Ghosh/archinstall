@@ -1,9 +1,11 @@
 import os, subprocess, time
-from rich import print
+from rich import Console
 from GPUtil import getGPUs
 
+console = Console()
+
 def run_command(command, get_output = False):
-    print(f"\nRunning command: {command}\n")
+    console.log(f"\nRunning command: {command}\n")
     if get_output:
         return subprocess.getoutput(command)
     os.system(command)
