@@ -149,9 +149,9 @@ class ArchInstaller:
             needed_packages.update(OPTIONAL_PACKAGES)
         packages_to_install_later = needed_packages & CHAOTIC_AUR_PACKAGES
         needed_packages.difference_update(packages_to_install_later)
-        chaoric_aur_packages.update(packages_to_install_later)
         needed_packages = sorted(list(needed_packages))
-        return needed_packages, chaoric_aur_packages
+        packages_to_install_later = sorted(list(packages_to_install_later))
+        return needed_packages, packages_to_install_later
 
     def update_mkinitcpio_conf(self, root_dir = "/"):
         mkinitcpio_conf_dir = os.path.join(root_dir, "etc/mkinitcpio.conf")
@@ -252,7 +252,7 @@ class ArchInstaller:
         if self.response["add_chaotic_aur_repo"]:
             self.add_chaotic_aur_repo()
             self.run_chroot_command("pacman -Syu --noconfirm")
-            packages_to_install_text = " ".join(sorted(list(chaotic_aur_packages)))
+            packages_to_install_text = " ".join(chaotic_aur_packages)
             self.run_chroot_command("pacman -S {packages_to_install_text} --noconfirm")
         if self.response["remove_sudo_password"]:
             self.run_chroot_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
