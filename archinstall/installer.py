@@ -2,8 +2,8 @@ import os
 from rich import print
 from utils import run_command, add_breakpoint
 from filesystem_setup import EXT4Filesystem, BTRFSFilesystem
-from config import IS_TESTING, ADD_OPTIONAL_PACKAGES, CHAOTIC_AUR_PACKAGES
-from packages import ALL_PACKAGE_GROUPS, OPTIONAL_PACKAGES
+from config import IS_TESTING, ADD_OPTIONAL_PACKAGES
+from packages import ALL_PACKAGE_GROUPS, OPTIONAL_PACKAGES, CHAOTIC_AUR_PACKAGES
 
 if IS_TESTING:
     run_command = lambda command, *args, **kwargs: print(command)
