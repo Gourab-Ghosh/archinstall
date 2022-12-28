@@ -2,7 +2,7 @@ import os
 from rich import print
 from utils import run_command, add_breakpoint
 from filesystem_setup import EXT4Filesystem, BTRFSFilesystem
-from config import IS_TESTING, ADD_OPTIONAL_PACKAGES
+from config import IS_TESTING, ADD_OPTIONAL_PACKAGES, CHAOTIC_AUR_PACKAGES
 from packages import ALL_PACKAGE_GROUPS, OPTIONAL_PACKAGES
 
 if IS_TESTING:
@@ -147,11 +147,11 @@ class ArchInstaller:
             needed_packages.add("bluez-cups")
         if ADD_OPTIONAL_PACKAGES:
             needed_packages.update(OPTIONAL_PACKAGES)
-        for package in ["visual-studio-code-bin", "bluetooth-autoconnect"]:
-            if package in needed_packages:
-                needed_packages.remove(package)
+        packages_to_install_later = needed_packages & CHAOTIC_AUR_PACKAGES
+        needed_packages.difference_update(packages_to_install_later)
+        chaoric_aur_packages.update(packages_to_install_later)
         needed_packages = sorted(list(needed_packages))
-        return needed_packages
+        return needed_packages, chaoric_aur_packages
 
     def update_mkinitcpio_conf(self, root_dir = "/"):
         mkinitcpio_conf_dir = os.path.join(root_dir, "etc/mkinitcpio.conf")
@@ -245,13 +245,15 @@ class ArchInstaller:
         self.setup_locale()
         self.setup_hostname()
         self.setup_username_and_password()
-        packages_to_install = self.get_needed_packages()
+        packages_to_install, chaoric_aur_packages = self.get_needed_packages()
         packages_to_install_text = " ".join(packages_to_install)
         self.run_chroot_command("pacman -Syu --noconfirm")
         self.run_chroot_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
         if self.response["add_chaotic_aur_repo"]:
             self.add_chaotic_aur_repo()
-        self.run_chroot_command("pacman -Syu --noconfirm")
+            self.run_chroot_command("pacman -Syu --noconfirm")
+            packages_to_install_text = " ".join(sorted(list(chaotic_aur_packages)))
+            self.run_chroot_command("pacman -S {packages_to_install_text} --noconfirm")
         if self.response["remove_sudo_password"]:
             self.run_chroot_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
         if self.response["filesystem"] == "BTRFS":
