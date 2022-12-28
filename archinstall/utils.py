@@ -1,5 +1,5 @@
-import os, subprocess, time
-from rich import Console
+import os, subprocess
+from rich.console import Console
 from GPUtil import getGPUs
 
 console = Console()
@@ -9,7 +9,6 @@ def run_command(command, get_output = False):
     if get_output:
         return subprocess.getoutput(command)
     os.system(command)
-    time.sleep(1)
 
 def get_locales():
     with open("/etc/locale.gen", "r") as rf:
