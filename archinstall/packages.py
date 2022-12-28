@@ -48,3 +48,5 @@ OPTIONAL_PACKAGES = {"xorg-server-devel", "xorg-apps", "iw", "wpa_supplicant", "
 ALL_PACKAGE_GROUPS = {}
 for _dict in [SERVICES, PACKAGES, DE, DM, KERNELS]:
     ALL_PACKAGE_GROUPS.update(_dict)
+
+CHAOTIC_AUR_PACKAGES = {"visual-studio-code-bin", "bluetooth-autoconnect"}
