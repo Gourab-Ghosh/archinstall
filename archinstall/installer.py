@@ -237,7 +237,6 @@ class ArchInstaller:
             self.add_blackarch_repo()
         if "Sublime Text" in self.response["packages_to_install"]:
             self.add_sublime_text_repo()
-        self.run_chroot_command("pacman -Sy archlinux-keyring --noconfirm")
         if self.response["swap_type"] == "Swap to File":
             self.generate_swap_file()
         self.setup_timezone()
@@ -246,10 +245,12 @@ class ArchInstaller:
         self.setup_username_and_password()
         packages_to_install = self.get_needed_packages()
         packages_to_install_text = " ".join(packages_to_install)
+        self.run_chroot_command("pacman -Syu --noconfirm")
         self.run_chroot_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
         add_breakpoint()
         if self.response["add_chaotic_aur_repo"]:
             self.add_chaotic_aur_repo()
+        self.run_chroot_command("pacman -Syu --noconfirm")
         if self.response["remove_sudo_password"]:
             self.run_chroot_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
         if self.response["filesystem"] == "BTRFS":
