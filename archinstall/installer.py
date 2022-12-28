@@ -249,7 +249,6 @@ class ArchInstaller:
         packages_to_install_text = " ".join(packages_to_install)
         self.run_chroot_command("pacman -Syu --noconfirm")
         self.run_chroot_command(f"pacman -S {packages_to_install_text} --needed --noconfirm")
-        add_breakpoint()
         if self.response["add_chaotic_aur_repo"]:
             self.add_chaotic_aur_repo()
         self.run_chroot_command("pacman -Syu --noconfirm")
