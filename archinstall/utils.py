@@ -1,4 +1,5 @@
 import os, subprocess
+from rich import print
 from rich.console import Console
 from GPUtil import getGPUs
 
