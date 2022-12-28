@@ -62,4 +62,7 @@ def get_gpu_types():
 
 def add_breakpoint():
     print("\nPress <ENTER> to continue")
-    input()
+    try:
+        input()
+    except KeyboardInterruprt:
+        pass
