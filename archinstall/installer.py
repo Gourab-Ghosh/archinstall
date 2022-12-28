@@ -171,7 +171,7 @@ class ArchInstaller:
             self.run_chroot_command(f"mkinitcpio -p {kernels_text}")
 
     def enable_os_prober_in_grub(self):
-        os_prober_enable_text = "GRUB_DISABLE_OS_PROBER=\"false\""
+        os_prober_enable_text = "GRUB_DISABLE_OS_PROBER=false"
         with open("/etc/default/grub", "r") as rf:
             text = rf.read()
         line_to_replace = None
@@ -186,7 +186,8 @@ class ArchInstaller:
             self.run_chroot_command(f"sed -i \'s/{line_to_replace}/{os_prober_enable_text}/g\' /etc/default/grub")
         else:
             self.run_chroot_command(f"echo \"\" | tee -a /etc/default/grub")
-            self.run_chroot_command(f"echo {repr(os_prober_enable_text)} | tee -a /etc/default/grub")
+            os_prober_enable_text = "\n" + os_prober_enable_text + "\n"
+            self.run_chroot_command(f"echo -en {repr(os_prober_enable_text)} | tee -a /etc/default/grub")
 
     def setup_grub(self):
         bootloader_id = "Arch Linux"
