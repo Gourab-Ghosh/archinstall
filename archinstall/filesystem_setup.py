@@ -83,7 +83,7 @@ class BTRFSFilesystem(Filesystem):
             mount_options = ",".join(subvols_type_1_mount_options)
             if is_ssd(self.home_partition):
                 mount_options += ",ssd"
-            run_command(f"mount -o {mount_options},subvol=@home {self.home_partition} {self.temp_mount_dir}")
+            run_command(f"mount -o {mount_options},subvol=@home {self.home_partition} {_dir}")
         for subvol in subvols_type_2:
             _dir = os.path.join(self.temp_mount_dir, subvol)
             mount_options = ",".join(subvols_type_2_mount_options)
