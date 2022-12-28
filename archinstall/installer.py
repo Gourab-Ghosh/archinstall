@@ -170,9 +170,10 @@ class ArchInstaller:
             kernels_text = " ".join(kernels)
             self.run_chroot_command(f"mkinitcpio -p {kernels_text}")
 
-    def enable_os_prober_in_grub(self):
+    def enable_os_prober_in_grub(self, root_dir = "/"):
+        grub_file = os.path.join(root_dir, "etc/default/grub")
         os_prober_enable_text = "GRUB_DISABLE_OS_PROBER=false"
-        with open("/etc/default/grub", "r") as rf:
+        with open(grub_file, "r") as rf:
             text = rf.read()
         line_to_replace = None
         for line in text.splitlines():
@@ -183,11 +184,10 @@ class ArchInstaller:
                 line_to_replace = line
                 break
         if line_to_replace:
-            self.run_chroot_command(f"sed -i \'s/{line_to_replace}/{os_prober_enable_text}/g\' /etc/default/grub")
+            run_command(f"sed -i \'s/{line_to_replace}/{os_prober_enable_text}/g\' {grub_file}")
         else:
-            self.run_chroot_command(f"echo \"\" | tee -a /etc/default/grub")
             os_prober_enable_text = "\n" + os_prober_enable_text + "\n"
-            self.run_chroot_command(f"echo -en {repr(os_prober_enable_text)} | tee -a /etc/default/grub")
+            run_command(f"echo -en {repr(os_prober_enable_text)} | tee -a {grub_file}")
 
     def setup_grub(self):
         bootloader_id = "Arch Linux"
@@ -195,7 +195,7 @@ class ArchInstaller:
             bootloader_id += " (BTRFS)"
         self.run_chroot_command(f"grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=\"{bootloader_id}\" --recheck")
         if self.response["enable_os_prober"]:
-            self.enable_os_prober_in_grub()
+            self.enable_os_prober_in_grub(self.fs.temp_mount_dir)
         self.run_chroot_command("grub-mkconfig -o /boot/grub/grub.cfg")
 
     def enable_services(self): # incomplete
@@ -230,7 +230,8 @@ class ArchInstaller:
         self.fs.mount_partitions()
         self.enable_parallel_downloads()
         self.install_linux_base()
-        run_command(f"genfstab -U {self.fs.temp_mount_dir} >> {self.fs.temp_mount_dir}/etc/fstab")
+        fstab_path = os.path.join(self.fs.temp_mount_dir, "etc/fstab")
+        run_command(f"genfstab -U {self.fs.temp_mount_dir} >> {fstab_path}")
         self.enable_parallel_downloads(self.fs.temp_mount_dir)
         if self.response["enable_multilib_repo"]:
             self.enable_multilib(self.fs.temp_mount_dir)
