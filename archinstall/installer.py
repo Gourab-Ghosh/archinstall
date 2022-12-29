@@ -85,8 +85,9 @@ class ArchInstaller:
     def generate_swap_file(self, swap_memory):
         self.run_chroot_command("truncate -s 0 /swap/swapfile")
         self.run_chroot_command("chattr +C /swap/swapfile")
-        self.run_chroot_command("btrfs property set /swap/swapfile compression none")
-        self.run_chroot_command(f"dd if=/dev/zero of=/swap/swapfile bs=1G count={swap_memory} status=progress")
+        if self.response["filesystem"] == "BTRFS":
+            self.run_chroot_command("btrfs property set /swap/swapfile compression none")
+        self.run_chroot_command(f"dd if=/dev/zero of=/swap/swapfile bs=1M count={int(round(swap_memory*1024))} status=progress")
         self.run_chroot_command("chmod 600 /swap/swapfile")
         self.run_chroot_command("mkswap /swap/swapfile")
         self.run_chroot_command("swapon /swap/swapfile")
