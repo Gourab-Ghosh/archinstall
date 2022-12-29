@@ -80,6 +80,9 @@ class ArchInstaller:
         self.run_chroot_command('echo -e "\\n[sublime-text]\\nServer = https://download.sublimetext.com/arch/stable/x86_64" | tee -a /etc/pacman.conf')
 
     def generate_swap_file(self, swap_memory):
+        swap_dir = os.path.join(self.fs.temp_mount_dir, "swap")
+        if not os.path.isdir(swap_dir):
+            os.makedirs(swap_dir)
         self.run_chroot_command("truncate -s 0 /swap/swapfile")
         self.run_chroot_command("chattr +C /swap/swapfile")
         if self.response["filesystem"] == "BTRFS":
