@@ -37,10 +37,7 @@ class ArchInstaller:
 
     def __init__(self, response):
         self.response = response
-        swap_partition = None
-        if self.response["swap_type"].startswith("Swap to Partition"):
-            swap_partition = self.response["swap_type"][18:]
-        self.fs = self.fs_classes[self.response["filesystem"]](self.response["boot_partition"], self.response["root_partition"], self.response["home_partition"], swap_partition)
+        self.fs = self.fs_classes[self.response["filesystem"]](self.response["boot_partition"], self.response["root_partition"], self.response["home_partition"], self.response["swap_type"])
 
     def run_chroot_command(self, command):
         full_command = f"arch-chroot {self.fs.temp_mount_dir} /bin/sh -c {repr(command)}"
