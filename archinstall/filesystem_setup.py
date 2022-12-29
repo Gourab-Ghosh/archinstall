@@ -9,10 +9,14 @@ if IS_TESTING:
 
 class Filesystem:
 
-    def __init__(self, boot_partition, root_partition, home_partition, swap_partition, temp_mount_dir = "/mnt"):
+    def __init__(self, boot_partition, root_partition, home_partition, swap_type, temp_mount_dir = "/mnt"):
         self.boot_partition = boot_partition
         self.root_partition = root_partition
         self.home_partition = home_partition
+        self.swap_type = swap_type
+        swap_partition = None
+        if swap_type.startswith("Swap to Partition"):
+            swap_partition = swap_type[18:]
         self.swap_partition = swap_partition
         self.temp_mount_dir = temp_mount_dir
         if not os.path.isdir(self.temp_mount_dir):
@@ -49,7 +53,9 @@ class BTRFSFilesystem(Filesystem):
 
     def mount_partitions(self):
         subvols_type_1 = ["srv", "opt", "temp"]
-        subvols_type_2 = ["var", "swap"]
+        subvols_type_2 = ["var"]
+        if self.swap_type == "Swap to File":
+            subvols_type_2.append("swap")
         if not self.home_partition:
             subvols_type_1 += ["home"]
         subvols_type_1_mount_options = ["noatime", "compress=zstd", "space_cache=v2", "autodefrag", "discard=async"]
