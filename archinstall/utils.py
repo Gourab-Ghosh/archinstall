@@ -1,6 +1,7 @@
 import os, subprocess
 from rich import print
 from rich.console import Console
+from inquirer.shortcuts import confirm, text
 
 console = Console()
 
@@ -16,9 +17,14 @@ def run_command(command, get_output = False):
         return subprocess.getoutput(command)
     console.log(f"Running command: {command}")
     exec_return = os.system(command)
-    if exec_return:
+    while exec_return:
         print(f"\nError occured executing the command: {command}")
-        add_breakpoint()
+        if confirm("Edit command and run?", default=True):
+            command = text("Command to run", default = command).strip()
+            console.log(f"Running command: {command}")
+            exec_return = os.system(command)
+        else:
+            break            
 
 def get_locales():
     with open("/etc/locale.gen", "r") as rf:
