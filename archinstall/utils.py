@@ -16,7 +16,7 @@ def run_command(command, get_output = False):
         return subprocess.getoutput(command)
     console.log(f"Running command: {command}")
     exec_return = os.system(command)
-    if not exec_return:
+    if exec_return:
         print(f"\nError occured executing the command: {command}")
         add_breakpoint()
 
