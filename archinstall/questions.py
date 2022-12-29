@@ -1,23 +1,11 @@
 import os, inquirer
 from rich import print
-from inquirer.themes import BlueComposure
-from blessed import Terminal
 from inquirer.shortcuts import confirm, list_input
 from inquirer.render.console import ConsoleRender
 from utils import get_locales, run_command, get_disks, get_partitons
 from config import IS_TESTING
 
 checkbox_message = "(Press <spacebar> to select or desellect and then hit <enter>)"
-
-class CustomTheme(BlueComposure):
-    def __init__(self):
-        super().__init__()
-        self.Checkbox.selection_icon = ">"
-        self.Checkbox.selected_icon = "[*]"
-        self.Checkbox.unselected_icon = "[ ]"
-        self.List.selection_cursor = ">"
-
-DEFAULT_RENDER = ConsoleRender(theme = CustomTheme())
 
 class Checkbox(inquirer.Checkbox):
 
