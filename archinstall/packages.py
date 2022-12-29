@@ -36,7 +36,7 @@ for key in DE.keys():
 DM = {
     "gdm": {"gdm"},
     "sddm": {"sddm"},
-    "lightdm": {"lightdm" "lightdm-settings" "lightdm-gtk-greeter"},
+    "lightdm": {"lightdm", "lightdm-settings", "lightdm-gtk-greeter"},
     "lxdm": {"lxdm"},
     "no_display_manager": set(),
 }
