@@ -79,11 +79,11 @@ class ArchInstaller:
         self.run_chroot_command("curl -O https://download.sublimetext.com/sublimehq-pub.gpg && pacman-key --add sublimehq-pub.gpg && pacman-key --lsign-key 8A8F901A && rm sublimehq-pub.gpg")
         self.run_chroot_command('echo -e "\\n[sublime-text]\\nServer = https://download.sublimetext.com/arch/stable/x86_64" | tee -a /etc/pacman.conf')
 
-    def generate_swap_file(self):
+    def generate_swap_file(self, bs, count):
         self.run_chroot_command("truncate -s 0 /swap/swapfile")
         self.run_chroot_command("chattr +C /swap/swapfile")
         self.run_chroot_command("btrfs property set /swap/swapfile compression none")
-        self.run_chroot_command("dd if=/dev/zero of=/swap/swapfile bs=3G count=8 status=progress")
+        self.run_chroot_command(f"dd if=/dev/zero of=/swap/swapfile bs={bs}G count={count} status=progress")
         self.run_chroot_command("chmod 600 /swap/swapfile")
         self.run_chroot_command("mkswap /swap/swapfile")
         self.run_chroot_command("swapon /swap/swapfile")
@@ -240,7 +240,7 @@ class ArchInstaller:
         if "Sublime Text" in self.response["packages_to_install"]:
             self.add_sublime_text_repo()
         if self.response["swap_type"] == "Swap to File":
-            self.generate_swap_file()
+            self.generate_swap_file(1, 8)
         self.setup_timezone()
         self.setup_locale()
         self.setup_hostname()
