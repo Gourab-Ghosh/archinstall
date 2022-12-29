@@ -1,13 +1,26 @@
 import os, inquirer
 from rich import print
-from inquirer.themes import GreenPassion
+from inquirer.themes import Theme, Default
 from inquirer.shortcuts import confirm, list_input
 from inquirer.render.console import ConsoleRender
 from utils import get_locales, run_command, get_disks, get_partitons
 from config import IS_TESTING
 
 checkbox_message = "(Press <spacebar> to select or desellect and then hit <enter>)"
-DEFAULT_RENDER = ConsoleRender(theme = GreenPassion())
+
+class CustomTheme(Default):
+    def __init__(self):
+        super().__init__()
+        self.Question.brackets_color = term.bright_green
+        self.Checkbox.selection_color = term.bold_black_on_bright_green
+        self.Checkbox.selection_icon = ">"
+        self.Checkbox.selected_icon = "[*]"
+        self.Checkbox.selected_color = term.green
+        self.Checkbox.unselected_icon = "[ ]"
+        self.List.selection_color = term.bold_black_on_bright_green
+        self.List.selection_cursor = ">"
+
+DEFAULT_RENDER = ConsoleRender(theme = CustomTheme())
 
 class Checkbox(inquirer.Checkbox):
 
