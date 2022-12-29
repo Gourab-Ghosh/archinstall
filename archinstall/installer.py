@@ -247,7 +247,6 @@ class ArchInstaller:
             if self.response["swap_file_size"]:
                 swap_size = self.response["swap_file_size"]
             self.generate_swap_file(swap_size)
-            add_breakpoint()
         self.setup_timezone()
         self.setup_locale()
         self.setup_hostname()
