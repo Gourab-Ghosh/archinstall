@@ -84,8 +84,8 @@ class ArchInstaller:
         if not os.path.isdir(swap_dir):
             os.makedirs(swap_dir)
         self.run_chroot_command("truncate -s 0 /swap/swapfile")
-        self.run_chroot_command("chattr +C /swap/swapfile")
         if self.response["filesystem"] == "BTRFS":
+            self.run_chroot_command("chattr +C /swap/swapfile")
             self.run_chroot_command("btrfs property set /swap/swapfile compression none")
         self.run_chroot_command(f"dd if=/dev/zero of=/swap/swapfile bs=1M count={int(round(swap_memory*1024))} status=progress")
         self.run_chroot_command("chmod 600 /swap/swapfile")
@@ -247,6 +247,7 @@ class ArchInstaller:
             if self.response["swap_file_size"]:
                 swap_size = self.response["swap_file_size"]
             self.generate_swap_file(swap_size)
+            add_breakpoint()
         self.setup_timezone()
         self.setup_locale()
         self.setup_hostname()
