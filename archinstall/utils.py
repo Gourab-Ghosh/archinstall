@@ -1,4 +1,4 @@
-import os, subprocess
+import os, sys, subprocess
 from rich import print
 from rich.console import Console
 from inquirer.shortcuts import confirm, text
@@ -10,7 +10,7 @@ def add_breakpoint():
     try:
         input()
     except KeyboardInterruprt:
-        pass
+        sys.exit()
 
 def run_command(command, get_output = False):
     if get_output:
@@ -24,7 +24,7 @@ def run_command(command, get_output = False):
             console.log(f"Running command: {command}")
             exec_return = os.system(command)
         else:
-            break            
+            sys.exit()
 
 def get_locales():
     with open("/etc/locale.gen", "r") as rf:
