@@ -23,6 +23,7 @@ def main():
     response = ask_choices()
     if not response:
         sys.exit()
+    response["packages_to_install"] = [package[:-23] if package.endswith(" [Requires Chaotic AUR]") else package for package in response["packages_to_install"]]
     swap_size = response["swap_file_size"]
     try:
         swap_size_float = float(swap_size)
