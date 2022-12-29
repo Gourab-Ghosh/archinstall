@@ -244,8 +244,8 @@ class ArchInstaller:
             self.add_sublime_text_repo()
         if self.response["swap_type"] == "Swap to File":
             swap_size = 8
-            if self.response["swap_to_file_size"]:
-                swap_size = self.response["swap_to_file_size"]
+            if self.response["swap_file_size"]:
+                swap_size = self.response["swap_file_size"]
             self.generate_swap_file(swap_size)
         self.setup_timezone()
         self.setup_locale()
@@ -276,6 +276,7 @@ if __name__ == "__main__":
         "root_partition": "/dev/sda2",
         "home_partition": None,
         "swap_type": "No Swap",
+        "swap_file_size": None,
         "filesystem": "BTRFS",
         "additional_kernels": [],
         "desktop_environments": ["i3"],
@@ -301,6 +302,7 @@ if __name__ == "__main__":
         "root_partition": "/dev/nvme0n1p2",
         "home_partition": "/dev/sda5",
         "swap_type": "Swap to File",
+        "swap_file_size": None,
         # "swap_type": "Swap to Partition /dev/nvme0n1p3",
         "filesystem": "BTRFS",
         "additional_kernels": ["Linux Zen", "Linux LTS", "Linux Hardened"],
@@ -328,6 +330,7 @@ if __name__ == "__main__":
         "root_partition": "/dev/sda2",
         "home_partition": None,
         "swap_type": "Swap to File",
+        "swap_file_size": None,
         "filesystem": "BTRFS",
         "gpu_types": [],
         "additional_kernels": ["Linux Zen", "Linux LTS", "Linux Hardened"],
@@ -353,6 +356,7 @@ if __name__ == "__main__":
         "root_partition": "/dev/sda2",
         "home_partition": None,
         "swap_type": "Swap to File",
+        "swap_file_size": None,
         "filesystem": "BTRFS",
         "gpu_types": ["NVIDIA", "AMD", "Intel"],
         "additional_kernels": ["Linux Zen", "Linux LTS", "Linux Hardened"],
