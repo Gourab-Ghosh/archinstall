@@ -58,6 +58,9 @@ class ArchInstaller:
         required_packages = ALL_PACKAGE_GROUPS["base_packages"].copy()
         if self.response["filesystem"] == "BTRFS":
             required_packages.add("btrfs-progs")
+        for kernel in self.response["additional_kernels"]:
+            key = kernel.lower().replace(" ", "_")
+            required_packages.update(ALL_PACKAGE_GROUPS[key])
         req_package_str = " ".join(sorted(list(required_packages)))
         run_command(f"pacstrap {self.fs.temp_mount_dir} {req_package_str} --noconfirm")
 
@@ -132,7 +135,6 @@ class ArchInstaller:
         all_groups += self.response["packages_to_install"]
         all_groups += self.response["desktop_environments"]
         all_groups.append(self.response["display_manager"])
-        all_groups += self.response["additional_kernels"]
         for gpu_type in self.response["gpu_types"]:
             all_groups.append(gpu_type + " Drivers")
             if gpu_type == "AMD":
