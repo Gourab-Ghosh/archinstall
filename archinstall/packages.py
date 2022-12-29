@@ -1,6 +1,6 @@
 SERVICES = {
     "base_packages": {"base", "linux", "linux-firmware", "linux-headers", "linux-docs", "python", "python-rich"},
-    "basic_packages": {"pkgfile", "base-devel", "bash-completion", "rsync", "sudo", "networkmanager", "dhcpcd", "grub", "freetype2", "fuse2", "dosfstools", "lzop", "efibootmgr", "libisoburn", "os-prober", "mtools", "neofetch"},
+    "basic_packages": {"pkgfile", "base-devel", "bash-completion", "rsync", "sudo", "networkmanager", "dhcpcd", "grub", "freetype2", "fuse2", "dosfstools", "lzop", "efibootmgr", "libisoburn", "os-prober", "mtools", "neofetch", "mkinitcpio-firmware"},
     "blackarch_packages": {"yay"},
     "printing_support": {"cups", "hplip"},
     "bluetooth_support": {"bluez", "bluez-utils", "bluez-hid2hci", "bluetooth-autoconnect"},
@@ -49,4 +49,4 @@ ALL_PACKAGE_GROUPS = {}
 for _dict in [SERVICES, PACKAGES, DE, DM, KERNELS]:
     ALL_PACKAGE_GROUPS.update(_dict)
 
-CHAOTIC_AUR_PACKAGES = {"visual-studio-code-bin", "icu69", "bluetooth-autoconnect"}
+CHAOTIC_AUR_PACKAGES = {"visual-studio-code-bin", "icu69", "bluetooth-autoconnect", "mkinitcpio-firmware"}
