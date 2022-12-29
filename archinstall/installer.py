@@ -382,9 +382,3 @@ if __name__ == "__main__":
     installer = ArchInstaller(dummy_response_2)
     # installer = ArchInstaller(maximum_response)
     installer.install()
-
-
-
-# Packages not found: visual-studio-code-bin, bluetooth-autoconnect
-# firezilla
-
