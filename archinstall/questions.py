@@ -43,7 +43,7 @@ choices_questions = [
     ),
     inquirer.Text(
         "swap_to_file_size",
-        message="Enter your swap area in integer (in GB) [Leave empty if you have not selected Swap to File option]",
+        message="Enter your swap file size (in GB) [Leave empty if you have not selected Swap to File option]",
     ),
     inquirer.List(
         "filesystem",
