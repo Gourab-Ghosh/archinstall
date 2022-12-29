@@ -41,6 +41,10 @@ choices_questions = [
         choices=["No Swap"] + ["Swap to File"] + ["Swap to Partition " + partiton for partiton in get_partitons()],
         default="Swap to File",
     ),
+    inquirer.Text(
+        "swap_to_file_size",
+        message="Enter your swap area in integer (in GB) [Leave empty if you have not selected Swap to File option]",
+    ),
     inquirer.List(
         "filesystem",
         message="What filesyatem you want to use?",
