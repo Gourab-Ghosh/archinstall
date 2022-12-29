@@ -1,6 +1,6 @@
 import os, inquirer
 from rich import print
-from inquirer.themes import GreenPassion, BlueComposure
+from inquirer.themes import BlueComposure
 from blessed import Terminal
 from inquirer.shortcuts import confirm, list_input
 from inquirer.render.console import ConsoleRender
@@ -9,7 +9,7 @@ from config import IS_TESTING
 
 checkbox_message = "(Press <spacebar> to select or desellect and then hit <enter>)"
 
-class CustomTheme(GreenPassion):
+class CustomTheme(BlueComposure):
     def __init__(self):
         super().__init__()
         self.Checkbox.selection_icon = ">"
@@ -53,7 +53,8 @@ choices_questions = [
     ),
     inquirer.Text(
         "swap_file_size",
-        message="Enter your swap file size (in GB) [Leave empty if you have not selected Swap to File option]",
+        message="Enter your swap file size (in GB) [Ignore if you have not selected Swap to File option]",
+        default="8",
     ),
     inquirer.List(
         "filesystem",
@@ -170,6 +171,7 @@ choices_questions = [
     inquirer.Text(
         "pc_name",
         message="Enter your PC name",
+        default="archlinux"
     ),
 ]
 
