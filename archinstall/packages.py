@@ -10,7 +10,7 @@ SERVICES = {
 }
 
 PACKAGES = {
-    "visual_studio_code": {"visual-studio-code-bin", "glib2", "libdbusmenu-glib", "org.freedesktop.secrets"}, # "icu69"
+    "visual_studio_code": {"visual-studio-code-bin", "glib2", "libdbusmenu-glib", "org.freedesktop.secrets", "icu69"}
     "sublime_text": {"sublime-text", "gksu"},
     "firefox": {"sublime-text", "gksu"},
     "vlc": {"vlc"}, # "avahi", "aom", "gst-plugins-base-libs", "dav1d", "libdvdcss", "libavc1394", "libdc1394", "kwallet", "libbluray", "flac", "twolame", "libgme", "vcdimager", "libmtp", "systemd-libs", "smbclient", "libcdio", "gnu-free-fonts", "ttf-dejavu", "libssh2", "libnfs", "mpg123", "protobuf", "libmicrodns", "lua52-socket", "libdvdread", "libdvdnav", "libogg", "libshout", "libmodplug", "libvpx", "libvorbis", "speex", "opus", "libtheora", "libpng", "libjpeg-turbo", "librsvg", "x264", "x265", "zvbi", "libass", "libkate", "libtiger", "sdl_image", "srt", "aalib", "libcaca", "libpulse", "alsa-lib", "jack", "libsamplerate", "libsoxr", "lirc", "libgoom2", "projectm", "ncurses", "libnotify", "gtk3", "aribb24", "aribb25", "pcsclite", "live-media"
@@ -49,4 +49,4 @@ ALL_PACKAGE_GROUPS = {}
 for _dict in [SERVICES, PACKAGES, DE, DM, KERNELS]:
     ALL_PACKAGE_GROUPS.update(_dict)
 
-CHAOTIC_AUR_PACKAGES = {"visual-studio-code-bin", "bluetooth-autoconnect"}
+CHAOTIC_AUR_PACKAGES = {"visual-studio-code-bin", "icu69", "bluetooth-autoconnect"}
