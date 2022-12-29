@@ -1,15 +1,23 @@
 import os, subprocess
 from rich import print
 from rich.console import Console
-from GPUtil import getGPUs
 
 console = Console()
+
+def add_breakpoint():
+    print("\nPress <ENTER> to continue")
+    try:
+        input()
+    except KeyboardInterruprt:
+        pass
 
 def run_command(command, get_output = False):
     if get_output:
         return subprocess.getoutput(command)
     console.log(f"Running command: {command}")
-    os.system(command)
+    exec_return = os.system(command)
+    if not exec_return:
+        add_breakpoint()
 
 def get_locales():
     with open("/etc/locale.gen", "r") as rf:
@@ -62,10 +70,3 @@ def get_gpu_types():
                 gpu_types.add(_type.upper())
     gpu_types = sorted(list(gpu_types))
     return gpu_types
-
-def add_breakpoint():
-    print("\nPress <ENTER> to continue")
-    try:
-        input()
-    except KeyboardInterruprt:
-        pass
