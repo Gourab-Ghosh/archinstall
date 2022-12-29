@@ -1,7 +1,18 @@
 import os, sys, subprocess
 from rich import print
 from rich.console import Console
-from inquirer.shortcuts import confirm, text
+from inquirer.themes import BlueComposure
+from inquirer.shortcuts import confirm, editor
+
+class CustomTheme(BlueComposure):
+    def __init__(self):
+        super().__init__()
+        self.Checkbox.selection_icon = ">"
+        self.Checkbox.selected_icon = "[*]"
+        self.Checkbox.unselected_icon = "[ ]"
+        self.List.selection_cursor = ">"
+
+DEFAULT_RENDER = ConsoleRender(theme = CustomTheme())
 
 console = Console()
 
@@ -19,8 +30,8 @@ def run_command(command, get_output = False):
     exec_return = os.system(command)
     while exec_return:
         print(f"\nError occured executing the command: {command}")
-        if confirm("Edit command and run?", default=True):
-            command = text("Command to run", default = command).strip()
+        if confirm("Edit command and run?", default=True, render = render):
+            command = editor(default = command, render = render).strip()
             console.log(f"Running command: {command}")
             exec_return = os.system(command)
         else:
