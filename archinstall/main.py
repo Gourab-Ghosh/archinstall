@@ -23,6 +23,13 @@ def main():
     response = ask_choices()
     if not response:
         sys.exit()
+    swap_size = response["swap_to_file_size"]
+    try:
+        swap_size_int = int(swap_size)
+    except:
+        response["swap_to_file_size"] = None
+    else:
+        response["swap_to_file_size"] = swap_size_int
     passwords = ask_password(not response["username"])
     response.update(passwords)
     response["timezone"] = ask_timezone()
