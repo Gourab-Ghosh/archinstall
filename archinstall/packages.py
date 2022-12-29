@@ -1,6 +1,6 @@
 SERVICES = {
     "base_packages": {"base", "linux", "linux-firmware", "python", "python-rich"},
-    "basic_packages": {"pkgfile", "base-devel", "bash-completion", "rsync", "sudo", "networkmanager", "dhcpcd", "grub", "freetype2", "fuse2", "dosfstools", "lzop", "efibootmgr", "libisoburn", "os-prober", "mtools", "linux-headers", "linux-docs"},
+    "basic_packages": {"pkgfile", "base-devel", "bash-completion", "rsync", "sudo", "networkmanager", "dhcpcd", "grub", "freetype2", "fuse2", "dosfstools", "lzop", "efibootmgr", "libisoburn", "os-prober", "mtools", "linux-headers", "linux-docs", "neofetch"},
     "blackarch_packages": {"yay"},
     "printing_support": {"cups", "hplip"},
     "bluetooth_support": {"bluez", "bluez-utils", "bluez-hid2hci", "bluetooth-autoconnect"},
