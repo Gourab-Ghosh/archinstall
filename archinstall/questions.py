@@ -144,7 +144,7 @@ choices_questions = [
         "packages_to_install",
         message="Select the packages you want to install",
         choices=[
-            "Visual Studio Code",
+            "Visual Studio Code [Requires Chaotic AUR]",
             "Sublime Text",
             "Firefox",
             "VLC",
