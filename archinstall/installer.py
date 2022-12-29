@@ -208,9 +208,9 @@ class ArchInstaller:
         if "Printing Support" in self.response["servives_to_install"]:
             services.append("cups")
         if "Bluetooth Support" in self.response["servives_to_install"]:
-            # services += ["bluetooth", "bluetooth-autoconnect"]
-            services += ["bluetooth"]
-        services.append(self.response["display_manager"].lower())
+            services += ["bluetooth", "bluetooth-autoconnect"]
+        if self.response["display_manager"] != "No Display Manager":
+            services.append(self.response["display_manager"].lower())
         services.sort(key = lambda _str: _str.lower())
         services_text = " ".join(services)
         self.run_chroot_command(f"systemctl enable {services_text}")
