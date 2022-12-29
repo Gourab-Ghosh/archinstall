@@ -242,7 +242,10 @@ class ArchInstaller:
         if "Sublime Text" in self.response["packages_to_install"]:
             self.add_sublime_text_repo()
         if self.response["swap_type"] == "Swap to File":
-            self.generate_swap_file(24)
+            swap_size = 8
+            if self.response["swap_to_file_size"]:
+                swap_size = self.response["swap_to_file_size"]
+            self.generate_swap_file(swap_size)
         self.setup_timezone()
         self.setup_locale()
         self.setup_hostname()
