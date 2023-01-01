@@ -31,8 +31,8 @@ def run_command(command, get_output = False):
     exec_return = os.system(command)
     while exec_return:
         print(f"\nError occured executing the command: {command}")
-        if confirm("Edit command and run?", default=True, render = render):
-            command = editor(default = command, render = render).strip()
+        if confirm("Edit command and run?", default=True, render = DEFAULT_RENDER):
+            command = editor(default = command, render = DEFAULT_RENDER).strip()
             console.log(f"Running command: {command}")
             exec_return = os.system(command)
         else:
