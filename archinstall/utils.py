@@ -1,6 +1,7 @@
 import os, sys, subprocess
 from rich import print
 from rich.console import Console
+from inquirer.render.console import ConsoleRender
 from inquirer.themes import BlueComposure
 from inquirer.shortcuts import confirm, editor
 
