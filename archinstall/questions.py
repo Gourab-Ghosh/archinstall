@@ -1,7 +1,6 @@
 import os, inquirer
 from rich import print
 from inquirer.shortcuts import confirm, list_input
-from inquirer.render.console import ConsoleRender
 from utils import get_locales, run_command, get_disks, get_partitons
 from config import IS_TESTING
 
