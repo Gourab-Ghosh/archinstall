@@ -1,7 +1,7 @@
 import os, inquirer
 from rich import print
 from inquirer.shortcuts import confirm, list_input
-from utils import get_locales, run_command, get_disks, get_partitons
+from utils import get_locales, run_command, get_disks, get_partitons, DEFAULT_RENDER
 from config import IS_TESTING
 
 checkbox_message = "(Press <spacebar> to select or desellect and then hit <enter>)"
