@@ -58,7 +58,7 @@ def get_locales():
     return locales
 
 def get_blk_types(type):
-    output = run_command("lsblk -d -o name,type", get_output = True).strip()
+    output = run_command("lsblk -l -o name,type", get_output = True).strip()
     blks = []
     for line in output.splitlines():
         line = line.strip()
