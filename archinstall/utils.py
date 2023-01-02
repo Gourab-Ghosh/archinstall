@@ -36,7 +36,7 @@ def run_command(command, get_output = False):
             console.log(f"Running command: {command}")
             exec_code = os.system(command)
         else:
-            if confirm("Do you want to quit? (n will continue the script ignoring this command)", default=True, render = DEFAULT_RENDER):
+            if confirm("Do you want to quit? (Pressing n will continue the script ignoring this command)", default=True, render = DEFAULT_RENDER):
                 sys.exit(exec_code)
             else:
                 return
