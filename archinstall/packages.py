@@ -41,7 +41,8 @@ DM = {
     "no_display_manager": set(),
 }
 
-KERNELS = {f"linux_{name}": {f"linux-{name}", f"linux-{name}-headers", f"linux-{name}-docs"} for name in ["zen", "lts", "hardened"]}
+KERNELS = {f"linux_{name}": {f"linux-{name}", f"linux-{name}-headers", f"linux-{name}-docs", "wireless-regdb", "linux-firmware"} for name in ["zen", "lts", "hardened"]}
+KERNELS["linux_hardened"].update({"usbctl"})
 
 OPTIONAL_PACKAGES = {"xorg-server-devel", "xorg-apps", "iw", "wpa_supplicant", "dialog", "intel-ucode", "git", "reflector", "lshw", "unzip", "htop", "wget", "pulseaudio", "alsa-utils", "alsa-plugins", "pavucontrol", "xdg-user-dirs", "fprint", "archlinux-wallpaper"}
 
