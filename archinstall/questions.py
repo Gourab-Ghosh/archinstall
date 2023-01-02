@@ -179,6 +179,8 @@ def ask_for_partition():
         disk_to_partition = disks[0] if len(disks) == 1 else list_input("Select the disk you want to partition", choices=disks, render=DEFAULT_RENDER)
         run_cfdisk(disk_to_partition)
         while len(disks):
+            run_command("lsblk")
+            print()
             if confirm("Do you want to partition your disk(s) again?", default = False, render = DEFAULT_RENDER):
                 disks = get_disks()
                 if not len(disks):
