@@ -1,6 +1,5 @@
-pacman -S archlinux-keyring --noconfirm
-pacman -S python-rich python-pip --noconfirm
-pip3 install inquirer
+python3 -m ensurepip
+pip3 install rich inquirer
 export EDITOR=nano
 cd archinstall
 python3 main.py
