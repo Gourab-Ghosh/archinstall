@@ -212,8 +212,8 @@ class ArchInstaller:
         if self.response["display_manager"] != "No Display Manager":
             services.append(self.response["display_manager"].lower())
         services.sort(key = lambda _str: _str.lower())
-        services_text = " ".join(services)
-        self.run_chroot_command(f"systemctl enable {services_text}")
+        for service in services:
+            self.run_chroot_command(f"systemctl enable {service}")
 
     def fix_disk_mount_password_problem(self, root_dir = "/"):
         rules_folder = os.path.join(root_dir, "etc/polkit-1/rules.d/")
