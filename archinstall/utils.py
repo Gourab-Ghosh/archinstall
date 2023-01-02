@@ -28,15 +28,18 @@ def run_command(command, get_output = False):
     if get_output:
         return subprocess.getoutput(command)
     console.log(f"Running command: {command}")
-    exec_return = os.system(command)
-    while exec_return:
+    exec_code = os.system(command)
+    while exec_code:
         print(f"\nError occured executing the command: {command}")
         if confirm("Edit command and run?", default=True, render = DEFAULT_RENDER):
             command = editor(message = "", default = command, render = DEFAULT_RENDER).strip()
             console.log(f"Running command: {command}")
-            exec_return = os.system(command)
+            exec_code = os.system(command)
         else:
-            sys.exit()
+            if confirm("Do you want to quit?", default=True, render = DEFAULT_RENDER):
+                sys.exit(exec_code)
+            else:
+                return
 
 def get_locales():
     with open("/etc/locale.gen", "r") as rf:
@@ -54,23 +57,21 @@ def get_locales():
     locales.sort()
     return locales
 
+def get_blk_types(type):
+    output = run_command("lsblk -d -o name,type", get_output = True).strip()
+    blks = []
+    for line in output.splitlines():
+        line = line.strip()
+        if line.endswith(type):
+            blks.append("/dev/" + line.split()[0].strip())
+    blks.sort()
+    return blks
+
 def get_disks():
-    output = run_command("lsblk -d -o name", get_output = True)
-    disks = ["/dev/" + disk.strip() for disk in output.splitlines()[1:]]
-    disks.sort()
-    return disks
+    return get_blk_types("disk")
 
 def get_partitons():
-    disks = get_disks()
-    output = run_command("lsblk -l", get_output = True)
-    partitions = []
-    for line in output.splitlines()[1:]:
-        line = line[:line.index(" ")].strip()
-        if line:
-            partition = "/dev/" + line
-            if partition not in disks:
-                partitions.append(partition)
-    return partitions
+    return get_blk_types("part")
 
 def is_ssd(disk):
     output = run_command(f"lsblk -d -o name,rota {disk}", get_output = True)
@@ -80,12 +81,4 @@ def is_ssd(disk):
     return not rot_value
 
 def get_gpu_types():
-    gpu_types = set()
-    gpus = getGPUs()
-    for gpu in gpus:
-        gpu_name = gpu.name.lower()
-        for _type in ["amd", "nvidia", "intel"]:
-            if _type in gpu_name:
-                gpu_types.add(_type.upper())
-    gpu_types = sorted(list(gpu_types))
-    return gpu_types
+    return
