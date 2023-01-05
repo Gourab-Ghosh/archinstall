@@ -21,7 +21,7 @@ PACKAGES = {
 }
 
 DE = {
-    "kde": {"plasma", "plasma-wayland-session", "kde-applications", "kde-applications-meta", "ksysguard", "xf86-video-nouveau"},
+    "kde": {"plasma", "plasma-wayland-session", "kde-applications", "kde-applications-meta", "ksysguard", "xf86-video-nouveau", "encfs", "cryfs"},
     "gnome": {"gnome", "gnome-extra"},
     "i3": {"i3"},
     "cinnamon": {"cinnamon", "gnome-terminal"},
