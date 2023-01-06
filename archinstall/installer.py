@@ -211,6 +211,8 @@ class ArchInstaller:
             services += ["bluetooth", "bluetooth-autoconnect"]
         if self.response["display_manager"] != "No Display Manager":
             services.append(self.response["display_manager"].lower())
+        if "NVIDIA" in self.response["gpu_types"]:
+            services.append("nvidia-resume")
         services.sort(key = lambda _str: _str.lower())
         for service in services:
             self.run_chroot_command(f"systemctl enable {service}")
