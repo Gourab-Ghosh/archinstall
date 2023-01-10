@@ -90,7 +90,7 @@ def get_optional_dependencies(package):
             package = line[line.index(":")+1:].strip()
             optonal_deps.add(package)
             continue
-        if not line.statswith(" "):
+        if not line.startswith(" "):
             break
         if is_optional_dep:
             optonal_deps.add(line.strip())
