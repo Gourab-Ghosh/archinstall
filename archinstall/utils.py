@@ -87,7 +87,8 @@ def get_optional_dependencies(package):
     for line in output.splitlines():
         if line.startswith("Optional Deps"):
             is_optional_dep = True
-            package = line[line]
+            package = line[line.index(":")+1:].strip()
+            optonal_deps.add(package)
             continue
         if False:
             break
