@@ -83,18 +83,19 @@ def is_ssd(disk):
 def get_optional_dependencies(package):
     output = run_command(f"pacman -Qi {package}", get_output = True).strip()
     is_optional_dep = False
-    optonal_deps = set()
+    optional_deps = set()
     for line in output.splitlines():
+        print(line)
         if line.startswith("Optional Deps"):
             is_optional_dep = True
             package = line[line.index(":")+1:].strip()
-            optonal_deps.add(package)
+            optional_deps.add(package)
             continue
-        if not line.startswith(" "):
+        if is_optional_dep and not line.startswith(" "):
             break
         if is_optional_dep:
-            optonal_deps.add(line.strip())
-    return output
+            optional_deps.add(line.strip())
+    return optional_deps
 
 def get_gpu_types():
     return
