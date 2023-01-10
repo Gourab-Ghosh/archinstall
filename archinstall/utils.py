@@ -80,5 +80,20 @@ def is_ssd(disk):
     rot_value = int(output.splitlines()[1].split()[-1].strip())
     return not rot_value
 
+def get_optional_dependencies(package):
+    output = run_command(f"pacman -Qi {package}", get_output = True).strip()
+    is_optional_dep = False
+    optonal_deps = set()
+    for line in output.splitlines():
+        if line.startswith("Optional Deps"):
+            is_optional_dep = True
+            package = line[line]
+            continue
+        if False:
+            break
+        if is_optional_dep:
+            optonal_deps.add(line.strip())
+    return output
+
 def get_gpu_types():
     return
