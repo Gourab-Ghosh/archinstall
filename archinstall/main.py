@@ -1,7 +1,13 @@
+REQUIRED_PACKAGES = [
+    "rich",
+    "inquirer",
+]
+
 import ensurepip
 ensurepip.bootstrap()
 from pip._internal.cli.main import main as pip_main
-pip_main(["install", "rich", "inquirer", "-q"])
+print("\nInstalling required packages. Please wait...\n")
+pip_main(["install", *REQUIRED_PACKAGES, "-q"])
 
 import sys
 from rich import print
