@@ -53,7 +53,6 @@ def main():
     if IS_TESTING:
         print(response)
         print()
-    run_command("export EDITOR=nano")
     installer = ArchInstaller(response)
     installer.install()
 
