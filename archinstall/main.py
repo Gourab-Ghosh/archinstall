@@ -1,3 +1,8 @@
+import ensurepip
+ensurepip.bootstrap()
+from pip._internal.cli.main import main as pip_main
+pip_main(["install", "rich", "inquirer", "-q"])
+
 import sys
 from rich import print
 from rich.traceback import install
