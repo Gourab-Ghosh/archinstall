@@ -3,18 +3,21 @@ REQUIRED_PACKAGES = [
     "inquirer",
 ]
 
-import ensurepip
-ensurepip.bootstrap()
+import sys
+from config import IS_TESTING
+if not IS_TESTING:
+    import ensurepip
+    ensurepip.bootstrap()
 from pip._internal.cli.main import main as pip_main
 print("\nInstalling required packages. Please wait...\n")
-pip_main(["install", *REQUIRED_PACKAGES, "-q"])
+if pip_main(["install", *REQUIRED_PACKAGES, "-q"] + ["--require-virtualenv"] if IS_TESTING else []):
+    print("Please run the script in an virtual environment!")
+    sys.exit()
 
-import sys
 from rich import print
 from rich.traceback import install
 from questions import ask_choices, ask_for_partition, ask_password, ask_timezone
 from utils import run_command
-from config import IS_TESTING
 from installer import ArchInstaller
 install()
 
