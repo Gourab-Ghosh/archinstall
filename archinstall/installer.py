@@ -38,6 +38,9 @@ class ArchInstaller:
     def __init__(self, response):
         self.response = response
         self.fs = self.fs_classes[self.response["filesystem"]](self.response["boot_partition"], self.response["root_partition"], self.response["home_partition"], self.response["swap_type"])
+    
+    def set_editor(editor):
+        run_command(f"export EDITOR={editor}")
 
     def run_chroot_command(self, command):
         full_command = f"arch-chroot {self.fs.temp_mount_dir} /bin/sh -c {repr(command)}"
@@ -231,6 +234,7 @@ class ArchInstaller:
                 wf.write(disk_mount_password_problem_text)
 
     def install(self):
+        set_editor("nano")
         self.fs.format_partitions()
         self.fs.mount_partitions()
         self.enable_parallel_downloads()
