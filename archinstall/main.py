@@ -18,6 +18,7 @@ def initialize():
     run_command("timedatectl set-ntp true")
 
 def main():
+    run_command("export EDITOR=nano")
     testing_mode_warning_message = "WARNING: you are running the script in testing mode. No changes will be made on your pc. If you want to run the script in development mode, change IS_TESTING to False in config.py."
     development_mode_warning_message = "WARNING: you are running the script in development mode. Changes will be made on your pc. If you want to run the script in testing mode, change IS_TESTING to True in config.py."
     print()
