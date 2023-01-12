@@ -10,7 +10,7 @@ if not IS_TESTING:
     ensurepip.bootstrap()
 from pip._internal.cli.main import main as pip_main
 print("\nInstalling required packages. Please wait...\n")
-if pip_main(["install", *REQUIRED_PACKAGES, "-q"] + ["--require-virtualenv"] if IS_TESTING else []):
+if pip_main(["install", *REQUIRED_PACKAGES, "-q"] + (["--require-virtualenv"] if IS_TESTING else [])):
     print("Please run the script in an virtual environment!")
     sys.exit()
 
