@@ -1,0 +1,2 @@
+enable numlock
+enable sshd
