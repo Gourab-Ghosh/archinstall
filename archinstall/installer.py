@@ -233,6 +233,9 @@ class ArchInstaller:
         else:
             with open(f"{rules_folder}/10-udisks2.rules", "w") as wf:
                 wf.write(disk_mount_password_problem_text)
+    
+    def enable_numlock(self): # not implemented
+        pass
 
     def install(self):
         self.set_editor("nano")
@@ -273,6 +276,7 @@ class ArchInstaller:
             self.update_mkinitcpio_conf(self.fs.temp_mount_dir)
         self.setup_grub()
         self.enable_services()
+        self.enable_numlock()
         if "NVIDIA" in self.response["gpu_types"]:
             self.run_chroot_command("nvidia-xconfig")
         self.fix_disk_mount_password_problem(self.fs.temp_mount_dir)
