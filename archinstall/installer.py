@@ -168,6 +168,7 @@ class ArchInstaller:
                 req_line = line
                 break
         modules = req_line[9:-1].split()
+        # nvidia, nvidia_modeset, nvidia_uvm and nvidia_drm
         if "btrfs" not in modules or IS_TESTING:
             line_to_replace = req_line
             new_line = req_line.replace("(", "({").replace(")", "})").format(" ".join(modules + ["btrfs"]))
