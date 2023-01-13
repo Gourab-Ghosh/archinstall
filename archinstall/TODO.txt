@@ -1,2 +1,3 @@
 enable numlock
 enable sshd
+enable nvidia hooks in mkinitcpio.conf
