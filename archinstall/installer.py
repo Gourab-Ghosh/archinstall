@@ -238,7 +238,9 @@ class ArchInstaller:
         pass
 
     def install(self):
-        self.set_editor("nano")
+        editor = "nano"
+        run_command(f"pacman -Sy archlinux-keyring arch-install-scripts {editor} --needed --noconfirm")
+        self.set_editor(editor)
         self.fs.format_partitions()
         self.fs.mount_partitions()
         self.enable_parallel_downloads()
