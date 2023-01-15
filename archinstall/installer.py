@@ -40,7 +40,7 @@ class ArchInstaller:
         self.fs = self.fs_classes[self.response["filesystem"]](self.response["boot_partition"], self.response["root_partition"], self.response["home_partition"], self.response["swap_type"])
     
     def set_editor(self, editor):
-        run_command(f"export EDITOR={editor}")
+        run_command(f"set EDITOR={editor}")
 
     def run_chroot_command(self, command):
         full_command = f"arch-chroot {self.fs.temp_mount_dir} /bin/sh -c {repr(command)}"
