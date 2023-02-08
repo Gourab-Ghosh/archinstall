@@ -3,3 +3,4 @@ enable sshd
 enable nvidia hooks in mkinitcpio.conf
 add pkgstats package as chaoric-aur optional dependency
 disable baloo fle indexer
+setup fish
