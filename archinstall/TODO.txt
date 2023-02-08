@@ -4,3 +4,5 @@ enable nvidia hooks in mkinitcpio.conf
 add pkgstats package as chaoric-aur optional dependency
 disable baloo fle indexer
 setup fish
+fix grub os prober
+enable grub theme
