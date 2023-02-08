@@ -6,3 +6,4 @@ disable baloo fle indexer
 setup fish
 fix grub os prober
 enable grub theme (Xenlism)
+add nano
