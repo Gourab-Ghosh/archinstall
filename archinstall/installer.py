@@ -274,6 +274,8 @@ class ArchInstaller:
             self.run_chroot_command(f"pacman -S {packages_to_install_text} --noconfirm")
         if self.response["remove_sudo_password"]:
             self.run_chroot_command("echo \"%wheel ALL=(ALL:ALL) NOPASSWD: ALL\" | tee -a /etc/sudoers.d/10-installer")
+        else:
+            self.run_chroot_command("echo \"%wheel ALL=(ALL:ALL) ALL\" | tee -a /etc/sudoers.d/10-installer")
         if self.response["filesystem"] == "BTRFS":
             self.update_mkinitcpio_conf(self.fs.temp_mount_dir)
         self.setup_grub()
