@@ -8,3 +8,4 @@ fix grub os prober
 enable grub theme (Xenlism)
 add nano
 add find-the-command
+add LANG=en_US.UTF-8 > /etc/locale.conf
