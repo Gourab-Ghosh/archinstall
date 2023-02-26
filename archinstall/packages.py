@@ -3,7 +3,7 @@ SERVICES = {
     "basic_packages": {"python", "python-rich", "pkgfile", "base-devel", "bash-completion", "rsync", "sudo", "networkmanager", "dhcpcd", "grub", "freetype2", "fuse2", "dosfstools", "lzop", "efibootmgr", "libisoburn", "os-prober", "mtools", "neofetch", "mkinitcpio-firmware"},
     "blackarch_packages": {"yay"},
     "printing_support": {"cups", "hplip"},
-    "bluetooth_support": {"bluez", "bluez-utils", "bluez-hid2hci", "bluetooth-autoconnect"},
+    "bluetooth_support": {"bluez", "bluez-utils", "bluez-hid2hci", "pulseaudio-bluetooth", "bluetooth-autoconnect"},
     "nvidia_drivers": {"nvidia-utils", "nvidia-settings", "nvidia-dkms"},
     "amd_drivers": {"xf86-video-amdgpu", "xf86-video-vesa", "vulkan-radeon", "libva-mesa-driver", "mesa-vdpau"},
     "intel_drivers": {"xf86-video-intel"},
