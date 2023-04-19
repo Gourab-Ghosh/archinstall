@@ -50,4 +50,4 @@ ALL_PACKAGE_GROUPS = {}
 for _dict in [SERVICES, PACKAGES, DE, DM, KERNELS]:
     ALL_PACKAGE_GROUPS.update(_dict)
 
-CHAOTIC_AUR_PACKAGES = {"visual-studio-code-bin", "icu69", "bluetooth-autoconnect", "mkinitcpio-firmware"}
+CHAOTIC_AUR_PACKAGES = {"visual-studio-code-bin", "icu69", "bluetooth-autoconnect", "mkinitcpio-firmware", "auto-cpufreq"}
