@@ -1,6 +1,7 @@
 REQUIRED_PACKAGES = [
     "rich",
     "inquirer",
+    "psutil"
 ]
 
 import sys
