@@ -1,6 +1,7 @@
 enable numlock
 enable sshd
 enable nvidia hooks in mkinitcpio.conf
+echo options nvidia_drm modeset=1 | sudo tee /etc/modprobe.d/nvidia_drm.conf
 add pkgstats package as chaoric-aur optional dependency
 disable baloo fle indexer
 setup fish
