@@ -10,3 +10,13 @@ enable grub theme (Xenlism)
 add nano
 add find-the-command
 add LANG=en_US.UTF-8 > /etc/locale.conf
+
+consolefont hook fix:
+To fix it, you need provide the console font name in /etc/vconsole.conf, here is mine:
+
+KEYMAP=us
+FONT=tcvn8x16
+
+
+To find the correct console font’s names, you could view the list of them in /usr/share/kbd/consolefonts/.
+Then run sudo mkinitcpio -P
