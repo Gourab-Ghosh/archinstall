@@ -65,10 +65,6 @@ For advanced users, the script supports modifications such as adding new package
 
 Contributions to the script are welcome. Please ensure to test changes in a controlled environment before submitting a pull request.
 
-## License
-
-This script is distributed under the MIT license, allowing modification and distribution of the software with few restrictions.
-
 ## Acknowledgments
 
 Thanks to the Arch Linux community for their extensive documentation and support which greatly aided in the creation of this script.
